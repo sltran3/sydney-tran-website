@@ -8,7 +8,7 @@ const portfolioItems = [
   {
     title: "Grade Calculator",
     description:
-      "I got sick of the other websites and having to calculate the miniscule categories of my grade. Try out my Grade Calculator!",
+      "I got sick of the other websites and having to calculate the minuscule categories of my grade. Click to try out my Grade Calculator!",
     image: "/portfolio-grade-calculator.png",
     href: "https://sydsgradecalculator.vercel.app/",
   },
@@ -21,7 +21,7 @@ const portfolioItems = [
   {
     title: "HackIllinois UI",
     description:
-      "Created a User Interface design for a HackIllinois 2025 project!",
+      "User Interface design for a HackIllinois 2025 project!",
     image: "/portfolio-hackillinois-ui.png",
     href: "https://devpost.com/software/zyncup?_gl=1*z3nz7q*_gcl_au*MjczNjM2NDQ2LjE3NzAyNjIyNTI.*_ga*MzMxNjQ1NDI5LjE3NzAyNjIyNTI.*_ga_0YHJK3Y10M*czE3NzAyNjIyNTIkbzEkZzEkdDE3NzAyNjIyNTYkajU2JGwwJGgw",
   },
