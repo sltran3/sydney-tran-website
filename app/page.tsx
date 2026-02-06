@@ -87,7 +87,7 @@ export default function Home() {
           <div className="flex w-full justify-start lg:justify-end">
             <div className="h-60 w-60 overflow-hidden rounded-full border border-[#d3cfc6] bg-[#e8e4da] sm:h-72 sm:w-72 lg:h-80 lg:w-80">
               <Image
-                src="/portrait.jpg"
+                src="/head-shot.JPEG"
                 alt="Sydney Tran portrait"
                 width={400}
                 height={400}

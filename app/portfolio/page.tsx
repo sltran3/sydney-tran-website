@@ -20,8 +20,7 @@ const portfolioItems = [
   },
   {
     title: "HackIllinois UI",
-    description:
-      "User Interface design for a HackIllinois 2025 project!",
+    description: "User Interface design for a HackIllinois 2025 project!",
     image: "/portfolio-hackillinois-ui.png",
     href: "https://devpost.com/software/zyncup?_gl=1*z3nz7q*_gcl_au*MjczNjM2NDQ2LjE3NzAyNjIyNTI.*_ga*MzMxNjQ1NDI5LjE3NzAyNjIyNTI.*_ga_0YHJK3Y10M*czE3NzAyNjIyNTIkbzEkZzEkdDE3NzAyNjIyNTYkajU2JGwwJGgw",
   },
@@ -76,7 +75,9 @@ export default function PortfolioPage() {
                 key={item.title}
                 href={item.href}
                 target={item.href.startsWith("http") ? "_blank" : undefined}
-                rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                rel={
+                  item.href.startsWith("http") ? "noopener noreferrer" : undefined
+                }
                 className="group rounded-2xl border border-[#e7e1d7] bg-[#faf7f1] p-4 shadow-[0_1px_0_rgba(0,0,0,0.04)] transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_14px_24px_rgba(20,17,13,0.16)]"
               >
                 <div className="overflow-hidden rounded-xl border border-[#d5d0c5] bg-white">
