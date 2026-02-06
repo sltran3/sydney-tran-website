@@ -16,9 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Sydney Tran",
   description: "Portfolio landing page for Sydney Tran.",
-  icons: {
-    icon: "/LogoSyd.png",
-  },
+  icons: [
+    { rel: "icon", type: "image/png", url: "/LogoSyd.png" },
+  ],
 };
 
 export default function RootLayout({
