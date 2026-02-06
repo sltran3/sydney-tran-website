@@ -13,7 +13,7 @@ const allura = Allura({
 export default function Home() {
   const handleHover = (event: MouseEvent<HTMLAnchorElement>) => {
     event.currentTarget.style.transform = "translateY(-1px)";
-    event.currentTarget.style.boxShadow = "0 8px 18px rgba(20, 17, 13, 0.12)";
+    event.currentTarget.style.boxShadow = "var(--hover-shadow)";
   };
 
   const handleLeave = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -23,20 +23,20 @@ export default function Home() {
 
   return (
     <div
-      className={`${allura.variable} flex min-h-screen items-center justify-center bg-[#f1efe9] px-6 py-10 text-[#2f2c26]`}
+      className={`${allura.variable} flex min-h-screen items-center justify-center bg-[var(--color-page-bg)] px-6 py-10 text-[var(--color-page-text)]`}
     >
-      <main className="w-full max-w-5xl rounded-sm border border-[#c7c2b6] bg-[#f5f2eb] px-10 py-12 shadow-[0_1px_0_rgba(0,0,0,0.04)] sm:px-14 sm:py-14">
+      <main className="w-full max-w-5xl rounded-sm border border-[var(--color-panel-border)] bg-[var(--color-panel-bg)] px-10 py-12 shadow-[var(--panel-shadow)] sm:px-14 sm:py-14">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
           <section className="max-w-xl space-y-6">
             <div className="space-y-3">
-              <h1 className="font-[var(--font-allura)] text-5xl font-semibold text-[#2a2722] sm:text-6xl">
+              <h1 className="font-[var(--font-allura)] text-5xl font-semibold text-[var(--color-heading)] sm:text-6xl">
                 Sydney Tran
               </h1>
-              <p className="text-sm font-medium uppercase tracking-[0.3em] text-[#7a746a]">
+              <p className="text-sm font-medium uppercase tracking-[0.3em] text-[var(--color-muted)]">
                 
               </p>
             </div>
-            <div className="space-y-2 text-[15px] leading-6 text-[#5b564f]">
+            <div className="space-y-2 text-[15px] leading-6 text-[var(--color-body)]">
               <p>Computer Science + Advertising</p>
               <p>Student @ University of Illinois</p>
               <p>Urbana-Champaign</p>
@@ -45,7 +45,7 @@ export default function Home() {
               <a
                 href="mailto:sltran3@illinois.edu"
                 aria-label="Email Sydney Tran"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#d6d1c6] bg-white/80 text-[#2a2722] transition-colors hover:bg-white"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-icon-border)] bg-[var(--color-icon-bg)] text-[var(--color-heading)] transition-colors hover:bg-[var(--color-icon-hover-bg)]"
                 onMouseEnter={handleHover}
                 onMouseLeave={handleLeave}
               >
@@ -68,7 +68,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Sydney Tran on LinkedIn"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#d6d1c6] bg-white/80 text-[#2a2722] transition-colors hover:bg-white"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-icon-border)] bg-[var(--color-icon-bg)] text-[var(--color-heading)] transition-colors hover:bg-[var(--color-icon-hover-bg)]"
                 onMouseEnter={handleHover}
                 onMouseLeave={handleLeave}
               >
@@ -85,7 +85,7 @@ export default function Home() {
           </section>
 
           <div className="flex w-full justify-start lg:justify-end">
-            <div className="h-60 w-60 overflow-hidden rounded-full border border-[#d3cfc6] bg-[#e8e4da] sm:h-72 sm:w-72 lg:h-80 lg:w-80">
+            <div className="h-60 w-60 overflow-hidden rounded-full border border-[var(--color-image-border)] bg-[var(--color-image-bg)] sm:h-72 sm:w-72 lg:h-80 lg:w-80">
               <Image
                 src="/head-shot.JPEG"
                 alt="Sydney Tran portrait"
@@ -98,9 +98,9 @@ export default function Home() {
           </div>
         </div>
 
-        <nav className="mt-12 flex flex-wrap items-center gap-8 text-sm font-semibold uppercase tracking-[0.2em] text-[#3b362f]">
+        <nav className="mt-12 flex flex-wrap items-center gap-8 text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-nav-text)]">
           <a
-            className="rounded-full border border-transparent px-4 py-2 transition-colors hover:border-[#d6d1c6] hover:bg-white/70"
+            className="rounded-full border border-transparent px-4 py-2 transition-colors hover:border-[var(--color-nav-hover-border)] hover:bg-[var(--color-nav-hover-bg)]"
             href="/portfolio"
             onMouseEnter={handleHover}
             onMouseLeave={handleLeave}
@@ -108,7 +108,7 @@ export default function Home() {
             Portfolio
           </a>
           <a
-            className="rounded-full border border-transparent px-4 py-2 transition-colors hover:border-[#d6d1c6] hover:bg-white/70"
+            className="rounded-full border border-transparent px-4 py-2 transition-colors hover:border-[var(--color-nav-hover-border)] hover:bg-[var(--color-nav-hover-bg)]"
             href="/about"
             onMouseEnter={handleHover}
             onMouseLeave={handleLeave}
