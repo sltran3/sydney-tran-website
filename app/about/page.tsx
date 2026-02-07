@@ -29,6 +29,14 @@ export default function AboutPage() {
           >
             Portfolio
           </Link>
+          <Link
+            href="/contact"
+            className="rounded-full bg-[var(--color-chip-alt-bg)] px-4 py-2 text-[var(--color-chip-text)] transition-colors hover:bg-[var(--color-chip-bg)]"
+            onMouseEnter={handleHover}
+            onMouseLeave={handleLeave}
+          >
+            Contact
+          </Link>
         </div>
 
         <div className="mt-6 rounded-3xl border border-[var(--color-panel-border)] bg-[var(--color-card-inner-bg)] px-6 py-6 sm:px-8 sm:py-8">
@@ -65,15 +73,20 @@ export default function AboutPage() {
               </div>
 
               <div className="mt-6 rounded-3xl bg-[var(--color-accent-bg)] px-6 py-6 text-sm leading-6 text-[var(--color-accent-text)]">
-                <p>
-                  Hiii! Nice to meet you :P My name is Sydney Tran and I’m from
-                  California. I’m a Computer Science + Advertising Student at
-                  the University of Illinois Urbana-Champaign with a minor in
-                  Data Science. I enjoy scrapbooking and doing my own nails. I
-                  love anything active and exploring new things.
-                </p>
-                <p className="mt-4 italic">
-                  *Fun fact I developed this website in 3 hours!*
+                <p>Hey, I'm Sydney! 👩🏻‍💻</p>
+                <p className="mt-4 text-[15px] leading-7 tracking-[0.01em] text-pretty">
+                  I’m a CS + Advertising student at the University of Illinois,
+                  from the Bay Area, California. I’m passionate about creating
+                  technology that improves lives and solves real problems,
+                  especially at the intersection of engineering and design.
+                  When I’m not coding, I’m usually exploring new things or
+                  making crafts.{" "}
+                  <Link
+                    href="/contact"
+                    className="font-semibold text-[var(--color-accent-text)] underline decoration-transparent transition-colors hover:text-[var(--color-heading)] hover:decoration-[var(--color-heading)]"
+                  >
+                    Feel free to reach out to me!
+                  </Link>
                 </p>
                 <p className="mt-2 text-right text-xs">std::endl</p>
               </div>

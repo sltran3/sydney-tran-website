@@ -115,6 +115,14 @@ export default function Home() {
           >
             About Me
           </a>
+          <a
+            className="rounded-full border border-transparent px-4 py-2 transition-colors hover:border-[var(--color-nav-hover-border)] hover:bg-[var(--color-nav-hover-bg)]"
+            href="/contact"
+            onMouseEnter={handleHover}
+            onMouseLeave={handleLeave}
+          >
+            Contact
+          </a>
         </nav>
       </main>
     </div>

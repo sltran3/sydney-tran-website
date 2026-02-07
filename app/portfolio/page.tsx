@@ -55,6 +55,14 @@ export default function PortfolioPage() {
           <span className="rounded-full bg-[var(--color-chip-bg)] px-4 py-2 text-[var(--color-chip-text)]">
             Portfolio
           </span>
+          <Link
+            href="/contact"
+            className="rounded-full bg-[var(--color-chip-alt-bg)] px-4 py-2 text-[var(--color-chip-text)] transition-colors hover:bg-[var(--color-chip-bg)]"
+            onMouseEnter={handleHover}
+            onMouseLeave={handleLeave}
+          >
+            Contact
+          </Link>
         </div>
 
         <div className="mt-6 rounded-3xl border border-[var(--color-panel-border)] bg-[var(--color-card-inner-bg)] px-6 py-6 sm:px-8 sm:py-8">
