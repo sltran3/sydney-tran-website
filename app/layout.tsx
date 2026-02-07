@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "Sydney Tran",
   description: "Portfolio landing page for Sydney Tran.",
   icons: [
-    { rel: "icon", type: "image/png", url: "/LogoSyd.png" },
+    { rel: "icon", type: "image/png", url: "/sydLogo.png" },
   ],
 };
 
