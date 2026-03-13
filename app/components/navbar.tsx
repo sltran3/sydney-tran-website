@@ -52,7 +52,11 @@ export default function Navbar() {
   const scrollTo = (href: string) => {
     setMenuOpen(false);
     const id = href.replace("#", "");
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    if (id === "hero") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -69,7 +73,7 @@ export default function Navbar() {
           onClick={() => scrollTo("#hero")}
           className="transition-opacity hover:opacity-70"
         >
-          <span className="relative block h-16 scale-125 origin-left">
+          <span className="relative block h-16">
             <Image
               src="/sydneytranlogo.png"
               alt="Sydney Tran"

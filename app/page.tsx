@@ -66,9 +66,9 @@ function TypewriterWord({ word, trigger, speed = 140 }: { word: string; trigger:
 // ── Project data ──────────────────────────────────────────────────────────────
 const projects = [
   {
-    title: "Research Methods Study Tool",
+    title: "Research Methods AI Study Tool",
     description:
-      "ADV 281 is notoriously difficult...so I built an AI-powered study tool that generates curated practice exams to help students learn concepts and actually survive the class.",
+      "I built an AI-powered study tool for my ADV 281 class that generates curated practice exams to better understand the nuances of concepts",
     stack: "TypeScript • Anthropic API • Supabase",
     image: "/portfolio-research-methods.png",
     video: "/videos/research-methods.mp4",
@@ -77,14 +77,14 @@ const projects = [
   {
     title: "Grade Calculator",
     description:
-      "I got sick of other websites and having to calculate the minuscule categories of my grade. Click to try out my Grade Calculator!",
+      "I did not really like other online websites and having to calculate the minuscule categories of my grade. So I build a more functional one!",
     stack: "JavaScript • React • Next.js",
     image: "/portfolio-grade-calculator.png",
     video: "/videos/grade-calculator.mp4",
     href: "https://sydsgradecalculator.vercel.app/",
   },
   {
-    title: "HackIllinois UI",
+    title: "ZyncUp UI",
     description: "User Interface design for a HackIllinois 2025 project!",
     stack: "Figma • UI/UX",
     image: "/portfolio-hackillinois-ui.png",
@@ -433,9 +433,7 @@ export default function Home() {
         {/* Mobile-only: bio + buttons below photo */}
         <div className="w-full max-w-xl space-y-6 text-center lg:hidden">
           <p className="text-[15px] leading-7 text-[var(--color-body)]">
-            I build technology at the intersection of engineering and design —
-            from AI-powered study tools to polished UIs. Based in the Bay Area,
-            studying in Champaign.
+            I’m passionate about building intentional and impactful software. Based in the Bay Area, studying in Champaign. 
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <a
