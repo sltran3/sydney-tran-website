@@ -62,12 +62,12 @@ export default function ThemeToggle() {
           className="h-5 w-5"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.6"
+          strokeWidth="1.75"
           strokeLinecap="round"
           strokeLinejoin="round"
         >
-          <circle cx="12" cy="12" r="3.5" />
-          <path d="M12 2.75v2.5M12 18.75v2.5M4.75 12h2.5M16.75 12h2.5M5.47 5.47l1.77 1.77M16.76 16.76l1.77 1.77M18.53 5.47l-1.77 1.77M7.24 16.76l-1.77 1.77" />
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
         </svg>
       ) : isMounted ? (
         <svg

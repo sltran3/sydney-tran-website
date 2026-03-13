@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "./components/navbar";
 import ThemeToggle from "./components/theme-toggle";
 
 const geistSans = Geist({
@@ -52,10 +53,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="fixed right-6 top-6 z-50">
+        <Navbar />
+        {children}
+        <div className="fixed bottom-6 right-6 z-50">
           <ThemeToggle />
         </div>
-        {children}
+        <footer className="py-4 text-center text-xs text-[var(--color-muted)]">
+          ©2026 Sydney Tran. All rights reserved.
+        </footer>
       </body>
     </html>
   );
