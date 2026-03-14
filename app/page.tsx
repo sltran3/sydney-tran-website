@@ -719,7 +719,7 @@ export default function Home() {
                   onClick={() => { scrollTo("about"); setActiveWindow(w => w === "about" ? "academic" : "about"); }}
                   className="group flex items-center gap-1.5 px-4 pb-3 pt-1 font-mono text-xs transition-colors"
                 >
-                  <span className="text-[var(--color-muted)]">sydneytran@stwebsite ~ %</span>
+                  <span className="text-[var(--color-muted)]">sydneytran@website ~ %</span>
                   <span className="rounded px-1 text-[var(--color-body)] transition-colors group-hover:bg-[var(--color-chip-bg)] group-hover:text-[var(--color-chip-text)]">
                     cd sydney-tran/{activeWindow === "about" ? "academic" : "about"}
                   </span>
