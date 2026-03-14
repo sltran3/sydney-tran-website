@@ -84,7 +84,7 @@ const projects = [
     href: "https://sydsgradecalculator.vercel.app/",
   },
   {
-    title: "ZyncUp UI",
+    title: "ZyncUp UI/UX",
     description: "User Interface design for a HackIllinois 2025 project!",
     stack: "Figma • UI/UX",
     image: "/portfolio-hackillinois-ui.png",
@@ -134,7 +134,7 @@ function AcademicTabContent({ activeTab }: { activeTab: string }) {
           <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">languages</span><span className="text-[var(--color-muted)]"> = </span>[&quot;Python&quot;, &quot;C++&quot;, &quot;C&quot;, &quot;JavaScript&quot;, &quot;TypeScript&quot;, &quot;Java&quot;, &quot;HTML/CSS&quot;]</p>
           <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">frameworks</span><span className="text-[var(--color-muted)]"> = </span>[&quot;React&quot;, &quot;Next.js&quot;, &quot;Node.js&quot;, &quot;Webflow&quot;]</p>
           <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">technologies</span><span className="text-[var(--color-muted)]"> = </span>[&quot;Git&quot;, &quot;NumPy&quot;, &quot;CUDA&quot;, &quot;OpenCV&quot;, &quot;PyTorch&quot;, &quot;Scikit-image&quot;, &quot;ArrayFire&quot;, &quot;OpenCL&quot;, &quot;CUDA C++&quot;, &quot;Halide&quot;, &quot;Jupyter&quot;]</p>
-          <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">design</span><span className="text-[var(--color-muted)]"> = </span>[&quot;Figma&quot;, &quot;UI/UX&quot;, &quot;Graphic Design&quot;, &quot;Brand Identity&quot;]</p>
+          <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">design</span><span className="text-[var(--color-muted)]"> = </span>[&quot;Figma&quot;, &quot;UI/UX&quot;, &quot;Canva&quot;, &quot;Brand Identity&quot;]</p>
           <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">tools</span><span className="text-[var(--color-muted)]"> = </span>[&quot;Supabase&quot;, &quot;Anthropic API&quot;]</p>
         </div>
       )}
@@ -257,15 +257,15 @@ function AboutTabContent({ activeTab, triggerTypewriter }: { activeTab: string; 
             real problems, especially at the intersection of engineering and design. When I&apos;m not
             coding, I&apos;m usually exploring new things or making crafts.
           </p>
-          <p className="pt-2 text-[var(--color-muted)]">std::endl</p>
+          <p className="pt-2 text-[var(--color-muted)]">Click on the terminal command to see my skills!</p>
         </div>
       )}
       {activeTab === "interests" && (
         <div className="space-y-1 text-[var(--color-body)]">
           <p className="text-[var(--color-muted)]">{"{"}</p>
           <p className="pl-6"><span className="text-[var(--color-heading)]">&quot;currently_learning&quot;</span>: &quot;AI-powered product development&quot;,</p>
-          <p className="pl-6"><span className="text-[var(--color-heading)]">&quot;interests&quot;</span>: [&quot;swimming&quot;, &quot;traveling&quot;, &quot;cafe hopping&quot;],</p>
-          <p className="pl-6"><span className="text-[var(--color-heading)]">&quot;based_in&quot;</span>: &quot;Urbana-Champaign, IL (Bay Area at heart)&quot;,</p>
+          <p className="pl-6"><span className="text-[var(--color-heading)]">&quot;interests&quot;</span>: [&quot;swimming&quot;, &quot;traveling&quot;, &quot;cafe hopping&quot;, &quot;concerts&quot;],</p>
+          <p className="pl-6"><span className="text-[var(--color-heading)]">&quot;locations&quot;</span>: [&quot;Cupertino, CA&quot;, &quot;Urbana-Champaign, IL&quot; ],</p>
           <p className="pl-6"><span className="text-[var(--color-heading)]">&quot;open_to&quot;</span>: [&quot;internships&quot;, &quot;collaborations&quot;, &quot;coffee chats ☕&quot;]</p>
           <p className="text-[var(--color-muted)]">{"}"}</p>
         </div>
