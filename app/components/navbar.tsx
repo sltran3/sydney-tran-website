@@ -13,6 +13,7 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>("");
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -49,8 +50,13 @@ export default function Navbar() {
     return () => observers.forEach((o) => o.disconnect());
   }, []);
 
+  const closeMenu = () => {
+    setIsClosing(true);
+    setTimeout(() => { setMenuOpen(false); setIsClosing(false); }, 180);
+  };
+
   const scrollTo = (href: string) => {
-    setMenuOpen(false);
+    closeMenu();
     const id = href.replace("#", "");
     if (id === "hero") {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -73,14 +79,14 @@ export default function Navbar() {
           onClick={() => scrollTo("#hero")}
           className="transition-opacity hover:opacity-70"
         >
-          <span className="relative block h-16">
+          <span className="relative block h-10">
             <Image
               src="/sydneytranlogo.png"
               alt="Sydney Tran"
               width={0}
               height={0}
-              sizes="200px"
-              className={`h-16 w-auto object-contain transition-opacity duration-300 ${isDark ? "opacity-0" : "opacity-100"}`}
+              sizes="120px"
+              className={`h-10 w-auto object-contain transition-opacity duration-300 ${isDark ? "opacity-0" : "opacity-100"}`}
               priority
             />
             <Image
@@ -88,8 +94,8 @@ export default function Navbar() {
               alt="Sydney Tran"
               width={0}
               height={0}
-              sizes="200px"
-              className={`absolute inset-0 h-16 w-auto object-contain transition-opacity duration-300 ${isDark ? "opacity-100" : "opacity-0"}`}
+              sizes="120px"
+              className={`absolute inset-0 h-10 w-auto object-contain transition-opacity duration-300 ${isDark ? "opacity-100" : "opacity-0"}`}
               priority
             />
           </span>
@@ -119,7 +125,7 @@ export default function Navbar() {
         {/* Mobile: hamburger */}
         <div className="flex items-center gap-2 sm:hidden">
           <button
-            onClick={() => setMenuOpen((v) => !v)}
+            onClick={() => { if (menuOpen) { closeMenu(); } else { setMenuOpen(true); } }}
             aria-label="Toggle menu"
             className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-icon-border)] bg-[var(--color-icon-bg)] text-[var(--color-heading)]"
           >
@@ -137,8 +143,8 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile dropdown */}
-      {menuOpen && (
-        <div className="border-t border-[var(--color-panel-border)] bg-[var(--color-panel-bg)] px-6 pb-4 sm:hidden">
+      {(menuOpen || isClosing) && (
+        <div className={`border-t border-[var(--color-panel-border)] bg-[var(--color-panel-bg)] px-6 pb-4 sm:hidden ${isClosing ? "animate-menu-close" : "animate-menu-open"}`}>
           {NAV_LINKS.map(({ label, href }) => (
             <button
               key={href}

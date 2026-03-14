@@ -153,18 +153,34 @@ textarea {
 
 /* ── Carousel slide animations ── */
 @keyframes carouselInRight {
-  from { opacity: 0; transform: translateX(28px); }
+  from { opacity: 0; transform: translateX(18px); }
   to   { opacity: 1; transform: translateX(0); }
 }
 @keyframes carouselInLeft {
-  from { opacity: 0; transform: translateX(-28px); }
+  from { opacity: 0; transform: translateX(-18px); }
   to   { opacity: 1; transform: translateX(0); }
 }
 .animate-carousel-right {
-  animation: carouselInRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: carouselInRight 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .animate-carousel-left {
-  animation: carouselInLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: carouselInLeft 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Mobile nav dropdown ── */
+@keyframes menuSlideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes menuSlideUp {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-10px); }
+}
+.animate-menu-open {
+  animation: menuSlideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-menu-close {
+  animation: menuSlideUp 0.18s cubic-bezier(0.4, 0, 1, 1) both;
 }
 
 /* ── Window pop-out animation ── */

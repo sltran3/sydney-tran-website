@@ -102,6 +102,146 @@ const projects = [
 ];
 
 // ── About tab content (shared between card and modal) ─────────────────────────
+// ── Academic tab content ───────────────────────────────────────────────────────
+function AcademicTabContent({ activeTab }: { activeTab: string }) {
+  return (
+    <div className="px-6 py-7 font-mono text-sm leading-7 sm:px-8">
+      {activeTab === "courses" && (
+        <div className="space-y-1.5">
+          <p className="text-[var(--color-muted)]">#pragma once</p>
+          <p className="mb-3"><span className="text-[var(--color-muted)]">#include </span><span className="text-[var(--color-chip-text)]">&lt;coursesTaken&gt;</span></p>
+          {[
+            "Data Structures & Algorithms",
+            "Systems Programming",
+            "Object Oriented Programing",
+            "Data Science Programming",
+            "Linear Algebra",
+            "Discrete Mathematics and Structures",
+            "Probability & Statistics",
+            "Advertising Research Methods",
+          ].map((course, i) => (
+            <p key={course} className="text-[var(--color-body)]">
+              <span className="mr-4 select-none text-[var(--color-muted)]">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              {course}
+            </p>
+          ))}
+        </div>
+      )}
+      {activeTab === "skills" && (
+        <div className="space-y-2 text-[var(--color-body)]">
+          <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">languages</span><span className="text-[var(--color-muted)]"> = </span>[&quot;Python&quot;, &quot;C++&quot;, &quot;C&quot;, &quot;JavaScript&quot;, &quot;TypeScript&quot;, &quot;Java&quot;, &quot;HTML/CSS&quot;]</p>
+          <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">frameworks</span><span className="text-[var(--color-muted)]"> = </span>[&quot;React&quot;, &quot;Next.js&quot;, &quot;Node.js&quot;, &quot;Webflow&quot;]</p>
+          <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">technologies</span><span className="text-[var(--color-muted)]"> = </span>[&quot;Git&quot;, &quot;NumPy&quot;, &quot;CUDA&quot;, &quot;OpenCV&quot;, &quot;PyTorch&quot;, &quot;Scikit-image&quot;, &quot;ArrayFire&quot;, &quot;OpenCL&quot;, &quot;CUDA C++&quot;, &quot;Halide&quot;, &quot;Jupyter&quot;]</p>
+          <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">design</span><span className="text-[var(--color-muted)]"> = </span>[&quot;Figma&quot;, &quot;UI/UX&quot;, &quot;Graphic Design&quot;, &quot;Brand Identity&quot;]</p>
+          <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">tools</span><span className="text-[var(--color-muted)]"> = </span>[&quot;Supabase&quot;, &quot;Anthropic API&quot;]</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Collage interactive hotspots ──────────────────────────────────────────────
+const collageHotspots = [
+  {
+    id: "travel",
+    src: "/collage-components/travel.png",
+    label: "Travel",
+    caption: "Antelope Canyon",
+    popWidth: "42%",
+    region: { top: "5%", left: "8%", width: "34%", height: "53%" },
+  },
+  {
+    id: "dog",
+    src: "/collage-components/dog.png",
+    label: "Animals",
+    caption: "My dog Bella!",
+    region: { top: "4%", left: "48%", width: "38%", height: "52%" },
+  },
+  {
+    id: "snorkel",
+    src: "/collage-components/snorkel.png",
+    label: "Active Activities",
+    caption: "Snorkeling in Maui",
+    region: { top: "46%", left: "3%", width: "44%", height: "50%" },
+  },
+  {
+    id: "sunset",
+    src: "/collage-components/sunset.png",
+    label: "Adventure",
+    caption: "Exploring with friends!",
+    region: { top: "50%", left: "50%", width: "42%", height: "47%" },
+  },
+];
+
+function CollageView() {
+  const [active, setActive] = useState<string | null>(null);
+  const activeHotspot = collageHotspots.find((h) => h.id === active);
+
+  return (
+    <div className="flex justify-center px-4 py-4">
+      <div className="relative w-3/4">
+        <Image
+          src="/collage.png"
+          alt="collage"
+          width={800}
+          height={600}
+          className="w-full rounded-xl object-cover"
+        />
+
+        {collageHotspots.map((h) => (
+          <button
+            key={h.id}
+            onClick={() => setActive(h.id)}
+            aria-label={`View ${h.label}`}
+            style={{
+              position: "absolute",
+              top: h.region.top,
+              left: h.region.left,
+              width: h.region.width,
+              height: h.region.height,
+            }}
+            className="rounded-lg cursor-pointer transition-colors hover:bg-white/15 focus-visible:bg-white/15"
+          />
+        ))}
+
+        {activeHotspot && (
+          <>
+            <button
+              onClick={() => setActive(null)}
+              className="absolute inset-0 rounded-xl bg-black/40"
+              aria-label="Close"
+            />
+            <div className="animate-window-pop pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2">
+              <button
+                onClick={() => setActive(null)}
+                className="pointer-events-auto relative overflow-hidden rounded-2xl shadow-2xl"
+                style={{ width: activeHotspot.popWidth ?? "65%", maxWidth: 380 }}
+                aria-label="Close photo"
+              >
+                <Image
+                  src={activeHotspot.src}
+                  alt={activeHotspot.label}
+                  width={600}
+                  height={500}
+                  className="h-auto w-full object-cover"
+                />
+              </button>
+              <div className="pointer-events-none text-center">
+                <p className="text-xs font-semibold text-white drop-shadow">{activeHotspot.label}</p>
+                {activeHotspot.caption && (
+                  <p className="mt-0.5 text-xs text-white/80 drop-shadow">{activeHotspot.caption}</p>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function AboutTabContent({ activeTab, triggerTypewriter }: { activeTab: string; triggerTypewriter: boolean }) {
   return (
     <div className="px-6 py-7 font-mono text-sm leading-7 sm:px-8">
@@ -120,15 +260,6 @@ function AboutTabContent({ activeTab, triggerTypewriter }: { activeTab: string; 
           <p className="pt-2 text-[var(--color-muted)]">std::endl</p>
         </div>
       )}
-      {activeTab === "skills" && (
-        <div className="space-y-2 text-[var(--color-body)]">
-          <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">languages</span><span className="text-[var(--color-muted)]"> = </span>[&quot;Python&quot;, &quot;C++&quot;, &quot;C&quot;, &quot;JavaScript&quot;, &quot;TypeScript&quot;, &quot;Java&quot;, &quot;HTML/CSS&quot;]</p>
-          <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">frameworks</span><span className="text-[var(--color-muted)]"> = </span>[&quot;React&quot;, &quot;Next.js&quot;, &quot;Node.js&quot;, &quot;Webflow&quot;]</p>
-          <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">technologies</span><span className="text-[var(--color-muted)]"> = </span>[&quot;Git&quot;, &quot;NumPy&quot;, &quot;CUDA&quot;, &quot;OpenCV&quot;, &quot;PyTorch&quot;, &quot;Scikit-image&quot;, &quot;ArrayFire&quot;, &quot;OpenCL&quot;, &quot;CUDA C++&quot;, &quot;Halide&quot;, &quot;Jupyter&quot;]</p>
-          <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">design</span><span className="text-[var(--color-muted)]"> = </span>[&quot;Figma&quot;, &quot;UI/UX&quot;, &quot;Graphic Design&quot;, &quot;Brand Identity&quot;]</p>
-          <p><span className="text-[var(--color-muted)]">const </span><span className="text-[var(--color-heading)]">tools</span><span className="text-[var(--color-muted)]"> = </span>[&quot;Supabase&quot;, &quot;Anthropic API&quot;]</p>
-        </div>
-      )}
       {activeTab === "interests" && (
         <div className="space-y-1 text-[var(--color-body)]">
           <p className="text-[var(--color-muted)]">{"{"}</p>
@@ -139,6 +270,7 @@ function AboutTabContent({ activeTab, triggerTypewriter }: { activeTab: string; 
           <p className="text-[var(--color-muted)]">{"}"}</p>
         </div>
       )}
+      {activeTab === "collage" && <CollageView />}
     </div>
   );
 }
@@ -146,8 +278,13 @@ function AboutTabContent({ activeTab, triggerTypewriter }: { activeTab: string; 
 // ── About tabs ────────────────────────────────────────────────────────────────
 const aboutTabs = [
   { id: "about", label: "about.md" },
-  { id: "skills", label: "skills.tsx" },
   { id: "interests", label: "interests.json" },
+  { id: "collage", label: "collage.png" },
+];
+
+const academicTabs = [
+  { id: "courses", label: "courses.h" },
+  { id: "skills", label: "skills.txt" },
 ];
 
 // ── Formspree ─────────────────────────────────────────────────────────────────
@@ -202,7 +339,7 @@ function ProjectCard({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
-      className={`group relative overflow-hidden rounded-2xl border border-[var(--color-panel-border)] bg-[var(--color-card-bg)] shadow-[var(--panel-shadow)] ${className ?? ""}`}
+      className={`group relative rounded-2xl border-2 border-[var(--color-panel-border)] bg-[var(--color-card-bg)] shadow-[var(--panel-shadow)] ${className ?? ""}`}
       style={{
         transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(${hovered ? 1.02 : 1})`,
         transition: tilt.x === 0 && tilt.y === 0
@@ -212,7 +349,7 @@ function ProjectCard({
       }}
     >
       {/* Image / video area */}
-      <div className="relative h-48 overflow-hidden bg-[var(--color-image-bg)] sm:h-56">
+      <div className="relative m-3 h-44 overflow-hidden rounded-xl bg-[var(--color-image-bg)] sm:h-52">
         <Image
           src={project.image}
           alt={project.title}
@@ -230,7 +367,7 @@ function ProjectCard({
         />
         {/* Glare */}
         <div
-          className="absolute inset-0 pointer-events-none rounded-t-2xl"
+          className="absolute inset-0 pointer-events-none rounded-xl"
           style={{
             background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(255,255,255,0.18) 0%, transparent 60%)`,
             opacity: hovered ? 1 : 0,
@@ -251,12 +388,19 @@ function ProjectCard({
       </div>
 
       {/* Text */}
-      <div className="space-y-2 p-5">
+      <div className="space-y-2 px-5 pb-5 pt-2">
         <p className="font-semibold text-[var(--color-heading)]">{project.title}</p>
         <p className="text-sm leading-6 text-[var(--color-body)]">{project.description}</p>
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-muted)]">
-          {project.stack}
-        </p>
+        <div className="flex flex-wrap gap-1.5 pt-1">
+          {project.stack.split(" • ").map((tag) => (
+            <span
+              key={tag}
+              className="rounded-full bg-[var(--color-chip-bg)] px-3 py-1 text-xs font-semibold text-[var(--color-chip-text)]"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
       </div>
     </a>
   );
@@ -273,6 +417,8 @@ export default function Home() {
 
   // About tab state
   const [activeTab, setActiveTab] = useState("about");
+  const [activeWindow, setActiveWindow] = useState<"about" | "academic">("about");
+  const [activeAcademicTab, setActiveAcademicTab] = useState("courses");
 
   // About window state
   const [aboutModal, setAboutModal] = useState(false);
@@ -336,6 +482,32 @@ export default function Home() {
   const navigatePage = (dir: number) => {
     setSlideDir(dir);
     setProjectPage((p) => p + dir);
+  };
+
+  const swipeCooldown = useRef(false);
+  const touchStartX = useRef<number | null>(null);
+
+  const handleCarouselWheel = (e: React.WheelEvent) => {
+    if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
+    if (Math.abs(e.deltaX) < 30) return;
+    if (swipeCooldown.current) return;
+    swipeCooldown.current = true;
+    setTimeout(() => { swipeCooldown.current = false; }, 1100);
+    if (e.deltaX > 0 && projectPage < numPages - 1) navigatePage(1);
+    if (e.deltaX < 0 && projectPage > 0) navigatePage(-1);
+  };
+
+  const handleCarouselTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleCarouselTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const delta = touchStartX.current - e.changedTouches[0].clientX;
+    touchStartX.current = null;
+    if (Math.abs(delta) < 40) return;
+    if (delta > 0 && projectPage < numPages - 1) navigatePage(1);
+    if (delta < 0 && projectPage > 0) navigatePage(-1);
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -476,50 +648,84 @@ export default function Home() {
       <section
         id="about"
         ref={aboutSection.ref}
-        className={`mx-auto max-w-5xl px-6 py-20 sm:px-10 hidden-until-visible ${aboutSection.inView ? "animate-fade-up animate-stagger-1" : ""}`}
+        className="mx-auto max-w-5xl px-6 py-20 sm:px-10"
       >
-        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted)]">
+        <p className={`mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted)] hidden-until-visible ${aboutSection.inView ? "animate-fade-up animate-stagger-1" : ""}`}>
           
         </p>
-        <h2 className="mb-10 text-3xl font-bold text-[var(--color-heading)] sm:text-4xl">
-          About Me
+        <h2 className={`mb-10 text-3xl font-bold text-[var(--color-heading)] sm:text-4xl hidden-until-visible ${aboutSection.inView ? "animate-fade-up animate-stagger-2" : ""}`}>
+          {activeWindow === "about" ? "About" : "About"}
         </h2>
-        <div className="overflow-hidden rounded-2xl border border-[var(--color-panel-border)] bg-[var(--color-card-inner-bg)]">
+        <div className={`overflow-hidden rounded-2xl border border-[var(--color-panel-border)] bg-[var(--color-card-inner-bg)] hidden-until-visible ${aboutSection.inView ? "animate-window-pop animate-stagger-4" : ""}`}>
           {/* Title bar */}
           <div className="flex items-center gap-1.5 border-b border-[var(--color-panel-border)] bg-[var(--color-panel-bg)] px-4 py-2.5">
-            <button onClick={() => scrollTo("work")} aria-label="Go to Projects" className="relative group h-3 w-3 rounded-full bg-red-400 transition-opacity hover:opacity-75">
+            <button onClick={() => { scrollTo("about"); setTimeout(() => scrollTo("work"), 600); }} aria-label="Go to Projects" className="relative group h-3 w-3 rounded-full bg-red-400 transition-opacity hover:opacity-75">
               <svg className="absolute inset-0 m-auto h-2 w-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 8 8" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M1.5 1.5l5 5M6.5 1.5l-5 5" /></svg>
             </button>
-            <button onClick={() => { const i = aboutTabs.findIndex(t => t.id === activeTab); setActiveTab(aboutTabs[(i + 1) % aboutTabs.length].id); }} aria-label="Minimize" className="relative group h-3 w-3 rounded-full bg-yellow-400 transition-opacity hover:opacity-75">
+            <button
+              onClick={() => {
+                const tabs = activeWindow === "about" ? aboutTabs : academicTabs;
+                const cur = activeWindow === "about" ? activeTab : activeAcademicTab;
+                const setter = activeWindow === "about" ? setActiveTab : setActiveAcademicTab;
+                const i = tabs.findIndex(t => t.id === cur);
+                setter(tabs[(i + 1) % tabs.length].id);
+              }}
+              aria-label="Minimize"
+              className="relative group h-3 w-3 rounded-full bg-yellow-400 transition-opacity hover:opacity-75"
+            >
               <svg className="absolute inset-0 m-auto h-2 w-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 8 8" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M1.5 4h5" /></svg>
             </button>
             <button onClick={() => setAboutModal(true)} aria-label="Expand" className="relative group h-3 w-3 rounded-full bg-green-400 transition-opacity hover:opacity-75">
               <svg className="absolute inset-0 m-auto h-2 w-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 8 8" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M1 4.5V7h2.5M7 3.5V1H4.5" /></svg>
             </button>
-            <span className="ml-3 text-xs font-medium text-[var(--color-muted)]">~/sydney-tran</span>
+            <span className="ml-3 text-xs font-medium text-[var(--color-muted)]">~/sydney-tran/{activeWindow}</span>
           </div>
 
           {!aboutMinimized && (
             <>
               {/* File tabs */}
               <div className="flex border-b border-[var(--color-panel-border)] bg-[var(--color-panel-bg)]">
-                {aboutTabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`border-r border-[var(--color-panel-border)] px-5 py-2.5 text-xs font-medium tracking-wide transition-colors ${
-                      activeTab === tab.id
-                        ? "border-t-2 border-t-[var(--color-chip-text)] bg-[var(--color-card-inner-bg)] text-[var(--color-heading)]"
-                        : "text-[var(--color-muted)] hover:bg-[var(--color-card-inner-bg)] hover:text-[var(--color-heading)]"
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
+                {(activeWindow === "about" ? aboutTabs : academicTabs).map((tab) => {
+                  const cur = activeWindow === "about" ? activeTab : activeAcademicTab;
+                  const setter = activeWindow === "about" ? setActiveTab : setActiveAcademicTab;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => { scrollTo("about"); setter(tab.id); }}
+                      className={`border-r border-[var(--color-panel-border)] px-5 py-2.5 text-xs font-medium tracking-wide transition-colors ${
+                        cur === tab.id
+                          ? "border-t-2 border-t-[var(--color-chip-text)] bg-[var(--color-card-inner-bg)] text-[var(--color-heading)]"
+                          : "text-[var(--color-muted)] hover:bg-[var(--color-card-inner-bg)] hover:text-[var(--color-heading)]"
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Tab content */}
-              <AboutTabContent activeTab={activeTab} triggerTypewriter={aboutSection.inView} />
+              {activeWindow === "about"
+                ? <AboutTabContent activeTab={activeTab} triggerTypewriter={aboutSection.inView} />
+                : <AcademicTabContent activeTab={activeAcademicTab} />
+              }
+
+              {/* Terminal */}
+              <div className="border-t border-[var(--color-panel-border)] bg-[var(--color-panel-bg)]">
+                <p className="px-4 pt-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--color-muted)]">
+                  Terminal
+                </p>
+                <button
+                  onClick={() => { scrollTo("about"); setActiveWindow(w => w === "about" ? "academic" : "about"); }}
+                  className="group flex items-center gap-1.5 px-4 pb-3 pt-1 font-mono text-xs transition-colors"
+                >
+                  <span className="text-[var(--color-muted)]">sydneytran@stwebsite ~ %</span>
+                  <span className="rounded px-1 text-[var(--color-body)] transition-colors group-hover:bg-[var(--color-chip-bg)] group-hover:text-[var(--color-chip-text)]">
+                    cd sydney-tran/{activeWindow === "about" ? "academic" : "about"}
+                  </span>
+                  <span className="animate-cursor-blink text-[var(--color-muted)]">█</span>
+                </button>
+              </div>
             </>
           )}
         </div>
@@ -540,7 +746,7 @@ export default function Home() {
         </h2>
         {/* Carousel */}
         <div className={`hidden-until-visible ${workSection.inView ? "animate-fade-up animate-stagger-3" : ""}`}>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4" onWheel={handleCarouselWheel} onTouchStart={handleCarouselTouchStart} onTouchEnd={handleCarouselTouchEnd}>
             {/* Left chevron */}
             <button
               onClick={() => navigatePage(-1)}
@@ -702,30 +908,47 @@ export default function Home() {
               <button onClick={() => setAboutModal(false)} aria-label="Close" className="relative group h-3 w-3 rounded-full bg-red-400 transition-opacity hover:opacity-75">
                 <svg className="absolute inset-0 m-auto h-2 w-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 8 8" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M1.5 1.5l5 5M6.5 1.5l-5 5" /></svg>
               </button>
-              <button onClick={() => { const i = aboutTabs.findIndex(t => t.id === activeTab); setActiveTab(aboutTabs[(i + 1) % aboutTabs.length].id); }} aria-label="Minimize" className="relative group h-3 w-3 rounded-full bg-yellow-400 transition-opacity hover:opacity-75">
+              <button
+                onClick={() => {
+                  const tabs = activeWindow === "about" ? aboutTabs : academicTabs;
+                  const cur = activeWindow === "about" ? activeTab : activeAcademicTab;
+                  const setter = activeWindow === "about" ? setActiveTab : setActiveAcademicTab;
+                  const i = tabs.findIndex(t => t.id === cur);
+                  setter(tabs[(i + 1) % tabs.length].id);
+                }}
+                aria-label="Minimize"
+                className="relative group h-3 w-3 rounded-full bg-yellow-400 transition-opacity hover:opacity-75"
+              >
                 <svg className="absolute inset-0 m-auto h-2 w-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 8 8" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M1.5 4h5" /></svg>
               </button>
               <span className="h-3 w-3 rounded-full bg-green-400 opacity-40" />
-              <span className="ml-3 text-xs font-medium text-[var(--color-muted)]">~/sydney-tran</span>
+              <span className="ml-3 text-xs font-medium text-[var(--color-muted)]">~/sydney-tran/{activeWindow}</span>
             </div>
             {/* File tabs */}
             <div className="flex border-b border-[var(--color-panel-border)] bg-[var(--color-panel-bg)]">
-              {aboutTabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`border-r border-[var(--color-panel-border)] px-5 py-2.5 text-xs font-medium tracking-wide transition-colors ${
-                    activeTab === tab.id
-                      ? "border-t-2 border-t-[var(--color-chip-text)] bg-[var(--color-card-inner-bg)] text-[var(--color-heading)]"
-                      : "text-[var(--color-muted)] hover:bg-[var(--color-card-inner-bg)] hover:text-[var(--color-heading)]"
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
+              {(activeWindow === "about" ? aboutTabs : academicTabs).map((tab) => {
+                const cur = activeWindow === "about" ? activeTab : activeAcademicTab;
+                const setter = activeWindow === "about" ? setActiveTab : setActiveAcademicTab;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setter(tab.id)}
+                    className={`border-r border-[var(--color-panel-border)] px-5 py-2.5 text-xs font-medium tracking-wide transition-colors ${
+                      cur === tab.id
+                        ? "border-t-2 border-t-[var(--color-chip-text)] bg-[var(--color-card-inner-bg)] text-[var(--color-heading)]"
+                        : "text-[var(--color-muted)] hover:bg-[var(--color-card-inner-bg)] hover:text-[var(--color-heading)]"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
             </div>
             {/* Tab content */}
-            <AboutTabContent activeTab={activeTab} triggerTypewriter={true} />
+            {activeWindow === "about"
+              ? <AboutTabContent activeTab={activeTab} triggerTypewriter={true} />
+              : <AcademicTabContent activeTab={activeAcademicTab} />
+            }
           </div>
         </div>
       )}
