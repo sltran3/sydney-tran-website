@@ -69,7 +69,7 @@ const projects = [
     title: "Pinterest SEO Analytics Engine",
     description: "I built an automated analytics pipeline that scrapes my own Pinterest pin and scores keywords by trend volume to optimise engagement",
     stack: "Python • Playwright • SQLite • FastAPI",
-    image: "/portfolio-book.png",
+    image: "/portfolio-pinterest.png",
     video: "/videos/python-book.mp4",
     href: "https://github.com/sltran3/PinterestSEOEngine",
   },
@@ -79,7 +79,7 @@ const projects = [
       "I built an AI-powered study tool for my ADV 281 class that generates curated practice exams to better understand the nuances of concepts",
     stack: "TypeScript • Anthropic API • Supabase",
     image: "/portfolio-research-methods.png",
-    video: "/videos/research-methods.mp4",
+    video: "/ADV281demo.mp4",
     href: "https://sydsadv281.vercel.app/",
   },
   {
