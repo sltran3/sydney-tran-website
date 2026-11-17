@@ -1,26 +1,83 @@
 @import "tailwindcss";
 
+/* color tokens from the master doc */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --cloud-pink: #f2d0d5;
+  --lilac-haze: #d7cadc;
+  --sky-blue: #b9cfda;
+  --porcelain: #f8f5f1;
+  --mauve: #8f777f;
+  --mauve-dark: #6e5960; /* darker mauve so small text stays readable */
+  --ink: #25242a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-pink: var(--cloud-pink);
+  --color-lilac: var(--lilac-haze);
+  --color-sky: var(--sky-blue);
+  --color-paper: var(--porcelain);
+  --color-mauve: var(--mauve-dark);
+  --color-ink: var(--ink);
+  --font-sans: var(--f-sans);
+  --font-serif: var(--f-serif);
+  --font-mono: var(--f-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--porcelain);
+  color: var(--ink);
+}
+
+/* tiny uppercase labels */
+.mono {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* skill marquee */
+@keyframes marq {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.track { animation: marq 42s linear infinite; }
+.marq:hover .track { animation-play-state: paused; }
+
+/* slow cloud drift */
+@keyframes drift {
+  from { background-position: 0 0; }
+  to { background-position: 900px 0; }
+}
+.drift { animation: drift 160s linear infinite; }
+
+/* gentle tile bob */
+@keyframes bob {
+  0%, 100% { transform: translateY(-5px); }
+  50% { transform: translateY(5px); }
+}
+.bob { animation: bob 7s ease-in-out infinite; }
+
+/* nav underline */
+.navlink {
+  background-image: linear-gradient(var(--mauve), var(--mauve));
+  background-size: 0 1px;
+  background-repeat: no-repeat;
+  background-position: 0 85%;
+  transition: background-size 0.3s;
+}
+.navlink:hover { background-size: 100% 1px; }
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track, .drift, .bob { animation: none; }
+  html { scroll-behavior: auto; }
 }
