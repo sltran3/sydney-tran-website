@@ -14,14 +14,17 @@ export default async function CaseStudy(props: PageProps<"/work/[slug]">) {
   const i = studies.findIndex((s) => s.slug === slug);
   if (i < 0) notFound();
   const s = studies[i];
-  const next = studies[(i + 1) % studies.length];
+  // "Next" skips archived case studies (an archived page itself still opens by its address)
+  const shown = studies.filter((x) => !x.archived);
+  const next = shown.find((x) => studies.indexOf(x) > i) ?? shown[0];
 
   const facts = [
+    ["Client", s.client],
     ["Role", s.role],
-    ["Timeline", s.time],
-    ["Tools", s.tools],
-    ["Users", s.users],
-  ];
+    ...(s.type ? [["Type", s.type], ["Team", s.team], ["Year", s.time], ["Tools", s.tools]] : [
+      ["Timeline", s.time], ["Tools", s.tools], ["Users", s.users],
+    ]),
+  ].filter(([, value]) => value);
 
   return (
     <main className="bg-paper">
@@ -29,16 +32,30 @@ export default async function CaseStudy(props: PageProps<"/work/[slug]">) {
 
       {/* header */}
       <section className="mx-auto max-w-[1200px] px-12 pb-10 pt-36">
-        <p className="mono mb-4 text-mauve">Case study 0{i + 1} / 0{studies.length}</p>
         <h1 className="font-serif text-[clamp(64px,8vw,120px)] leading-[0.95] tracking-tight">{s.name}</h1>
         <p className="mt-3.5 font-serif text-[38px] italic">{s.outcome}</p>
-        <div className="mt-12 flex aspect-video items-center justify-center rounded-[10px] bg-gradient-to-br from-pink to-lilac">
-          <span className="mono">[ Hero mockup — 2880 × 1620 ]</span>
-        </div>
+        {s.description && <p className="mt-4 max-w-[54ch] text-lg">{s.description}</p>}
+        {s.video ? (
+          // the project's film: plays silently on a loop, like a moving cover image
+          <video
+            src={s.video}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-label={`${s.name}: a short film of the project`}
+            className="mt-12 aspect-video w-full rounded-[10px] bg-lilac object-cover"
+          />
+        ) : (
+          <div className="mt-12 flex aspect-video items-center justify-center rounded-[10px] bg-gradient-to-br from-pink to-lilac">
+            {!s.blankImages && <span className="label">[ Hero mockup — 2880 × 1620 ]</span>}
+          </div>
+        )}
         <div className="mt-9 grid grid-cols-2 gap-6 md:grid-cols-4">
           {facts.map(([k, v]) => (
             <div key={k} className="border-t border-ink/20 pt-3.5">
-              <p className="mono mb-1.5 text-mauve">{k}</p>
+              <p className="label mb-1.5 text-mauve">{k}</p>
               <p>{v}</p>
             </div>
           ))}
@@ -47,26 +64,57 @@ export default async function CaseStudy(props: PageProps<"/work/[slug]">) {
 
       {/* story */}
       <section className="mx-auto max-w-[760px] px-12 py-16 text-lg leading-relaxed">
-        <p className="mono mb-3.5 text-mauve">The problem</p>
+        {s.overview && (
+          <div className="mb-12">
+            <h2 className="label mb-3.5 text-mauve">Overview</h2>
+            <p className="mb-5 font-serif text-[32px] italic leading-tight">{s.overview.heading}</p>
+            {s.overview.paragraphs.map((p) => <p key={p} className="mb-5">{p}</p>)}
+          </div>
+        )}
+        <p className="label mb-3.5 text-mauve">The problem</p>
+        {s.problemHeading && <p className="mb-5 font-serif text-[32px] italic leading-tight">{s.problemHeading}</p>}
         {s.problem.map((p) => <p key={p} className="mb-5">{p}</p>)}
-        <p className="mono mb-2.5 mt-8 text-mauve">The goal</p>
+        <p className="label mb-2.5 mt-8 text-mauve">The goal</p>
         <p className="font-serif text-[32px] italic leading-tight">{s.goal}</p>
+        {s.concept && (
+          <div className="mt-12">
+            <h2 className="label mb-3.5 text-mauve">The concept</h2>
+            <p className="mb-5 font-serif text-[32px] italic leading-tight">{s.concept.heading}</p>
+            {s.concept.paragraphs.map((p) => <p key={p} className="mb-5">{p}</p>)}
+          </div>
+        )}
       </section>
 
       {/* four decisions */}
       <section className="mx-auto max-w-[1200px] px-12 pb-20">
-        {s.decisions.map((d, n) => <DecisionView key={d.title} d={d} n={n + 1} />)}
+        {s.decisions.map((d) => <DecisionView key={d.title} d={d} blankImages={s.blankImages} />)}
       </section>
+
+      {s.technical && (
+        <section className="mx-auto max-w-[760px] px-12 pb-20 text-lg leading-relaxed">
+          <h2 className="label mb-3.5 text-mauve">Technical development</h2>
+          <p className="mb-5 font-serif text-[32px] italic leading-tight">{s.technical.heading}</p>
+          {s.technical.paragraphs.map((p) => <p key={p} className="mb-5">{p}</p>)}
+        </section>
+      )}
 
       {/* ending */}
       <section className="bg-[#EDE6EF] px-12 py-24">
         <div className="mx-auto grid max-w-[1200px] gap-12 text-lg leading-relaxed md:grid-cols-2">
-          <div><p className="mono mb-3.5 text-mauve">What changed</p><p>{s.changed}</p></div>
-          <div><p className="mono mb-3.5 text-mauve">What I&apos;d change</p><p>{s.reflect}</p></div>
+          <div>
+            <p className="label mb-3.5 text-mauve">{s.changedHeading ? "Final product" : "What changed"}</p>
+            {s.changedHeading && <p className="mb-5 font-serif text-[32px] italic leading-tight">{s.changedHeading}</p>}
+            <p className="whitespace-pre-line">{s.changed}</p>
+          </div>
+          <div>
+            <p className="label mb-3.5 text-mauve">{s.reflectHeading ? "Reflection" : "What I'd change"}</p>
+            {s.reflectHeading && <p className="mb-5 font-serif text-[32px] italic leading-tight">{s.reflectHeading}</p>}
+            <p className="whitespace-pre-line">{s.reflect}</p>
+          </div>
         </div>
       </section>
 
-      <footer className="mono flex flex-wrap justify-between gap-3 px-12 py-12">
+      <footer className="label flex flex-wrap justify-between gap-3 px-12 py-12">
         <Link href="/#work" className="inline-flex min-h-11 items-center">← All work</Link>
         <Link href={`/work/${next.slug}`} className="inline-flex min-h-11 items-center">Next: {next.name} →</Link>
       </footer>
