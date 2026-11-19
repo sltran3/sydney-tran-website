@@ -59,7 +59,21 @@ export default function Nav() {
       />
       <div className="relative z-10 mx-auto flex max-w-[1400px] items-center justify-between gap-x-8 px-4 py-2 sm:px-10 sm:pb-3 sm:pt-4">
         {/* the chrome "S" mark, in place of the name (screen readers still hear "Sydney Tran") */}
-        <Link href="/#top" onClick={() => setOpen(false)} aria-label="Sydney Tran, home" className="-my-1 inline-flex items-center sm:-my-2">
+        <Link
+          href="/#top"
+          onClick={(e) => {
+            setOpen(false);
+            // already on the home page: Next.js skips a link to the same #hash that's already in the address, so
+            // scroll up ourselves (smoothly, unless reduced motion is on) and tidy the address back to "/"
+            if (path !== "/") return;
+            e.preventDefault();
+            const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            window.scrollTo({ top: 0, behavior: calm ? "auto" : "smooth" });
+            if (window.location.hash) history.replaceState(history.state, "", "/");
+          }}
+          aria-label="Sydney Tran, home"
+          className="-my-1 inline-flex items-center sm:-my-2"
+        >
           <Image
             src="/img/logo-s.webp"
             alt=""

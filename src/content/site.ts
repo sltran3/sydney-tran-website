@@ -4,7 +4,7 @@
 export const info = {
   name: "Sydney Tran",
   email: "sltran3@illinois.edu",
-  linkedin: "www.linkedin.com/in/sydney-tran-931404237", // TODO: real LinkedIn URL
+  linkedin: "https://www.linkedin.com/in/sydney-tran-931404237", // full address (with https://), or the browser treats it as a page on this site
   github: "https://github.com/sltran3", // TODO: real GitHub URL
   resume: "#", // TODO: add /resume.pdf to public/ and link it here
   place: "Champaign, IL", // TODO: confirm
