@@ -1,6 +1,15 @@
 // all the words on the site live here
 // anything in [brackets] still needs real info before publishing!
 
+// each film's still: its first frame, saved as public/img/posters/<film name>.webp. shown on the carousel card and
+// as the case-study film's poster until the film itself is playing (or if a phone won't play it)
+export const posterFor = (video: string) => video.replace(/^\/videos\/carousel\//, "/img/posters/").replace(/\.mp4$/, ".webp");
+
+// each film also has a lighter 720p copy for phones (3–7 MB instead of 23–32 MB), at
+// public/videos/carousel/mobile/<film name>.mp4. phones are screens up to PHONE_MEDIA wide
+export const PHONE_MEDIA = "(max-width: 767px)";
+export const phoneVideoFor = (video: string) => video.replace(/^\/videos\/carousel\//, "/videos/carousel/mobile/");
+
 export const info = {
   name: "Sydney Tran",
   email: "sltran3@illinois.edu",

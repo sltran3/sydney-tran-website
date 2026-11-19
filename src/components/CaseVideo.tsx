@@ -1,12 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Spinner from "@/components/Spinner";
+import { PHONE_MEDIA, phoneVideoFor, posterFor } from "@/content/site";
 
 // the film at the top of a case study: plays silently on a loop like a moving cover image, with a small frosted
 // control pill (back 5s · play/pause · forward 5s · scrubber · time) that shows only while the pointer is over the
 // bottom strip of the film (where the pill sits) and fades out quickly when it leaves. keyboard users get it while tabbing through it; touch screens (no
 // hover) get it while paused, so a tap on the film pauses it and brings the controls up. clicking the film also
 // pauses / plays.
+// until it's playing, the film's still (its first frame) shows, with a loading ring while it downloads. if the
+// phone won't start it on its own (e.g. iPhone Low Power Mode), a big play button shows instead.
 
 const SKIP = 5; // seconds
 
@@ -23,6 +27,15 @@ export default function CaseVideo({ src, label, className = "" }: { src: string;
   const [paused, setPaused] = useState(false);
   const [time, setTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [loading, setLoading] = useState(true); // nothing playing yet, or it's stalled waiting for data
+  const [blocked, setBlocked] = useState(false); // the browser refused to start it without a tap
+
+  // start it ourselves too, so we hear about it if the browser refuses
+  useEffect(() => {
+    video.current?.play().catch((e: unknown) => {
+      if (e instanceof DOMException && e.name === "NotAllowedError") setBlocked(true);
+    });
+  }, []);
   const scrubbing = useRef(false);
 
   // the scrubber fill follows playback every frame (timeupdate alone only fires ~4× a second and looks jumpy)
@@ -65,21 +78,43 @@ export default function CaseVideo({ src, label, className = "" }: { src: string;
     <div className={`group relative overflow-hidden rounded-[10px] bg-lilac ${className}`}>
       <video
         ref={video}
-        src={src}
         autoPlay
         muted
         loop
         playsInline
         preload="metadata"
+        poster={posterFor(src)}
         aria-label={label}
         onClick={toggle}
         onPlay={() => setPaused(false)}
+        onPlaying={() => { setLoading(false); setBlocked(false); }}
+        onWaiting={() => setLoading(true)}
         onPause={() => setPaused(true)}
         onTimeUpdate={(e) => { if (!scrubbing.current) setTime(e.currentTarget.currentTime); }}
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
         onDurationChange={(e) => setDuration(e.currentTarget.duration)}
         className="block aspect-video w-full cursor-pointer object-cover"
-      />
+      >
+        {/* the browser plays the first one that fits: phones get the lighter 720p copy */}
+        <source src={phoneVideoFor(src)} type="video/mp4" media={PHONE_MEDIA} />
+        <source src={src} type="video/mp4" />
+      </video>
+
+      {/* loading ring in the middle while it downloads; a big play button if the phone wouldn't start it */}
+      <div className="pointer-events-none absolute inset-0 grid place-items-center">
+        {blocked ? (
+          <button
+            type="button"
+            onClick={toggle}
+            aria-label="Play video"
+            className="pointer-events-auto grid size-16 place-items-center rounded-full bg-[rgba(24,16,22,0.42)] text-white shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/20 backdrop-blur-xl transition active:scale-95"
+          >
+            <svg viewBox="0 0 24 24" className="size-7 translate-x-0.5" fill="currentColor" aria-hidden><path d="M8 5.6v12.8a1 1 0 0 0 1.5.86l10.2-6.4a1 1 0 0 0 0-1.72L9.5 4.74A1 1 0 0 0 8 5.6Z" /></svg>
+          </button>
+        ) : (
+          <Spinner show={loading} />
+        )}
+      </div>
 
       {/* the hover zone: the bottom strip of the film. the controls only come up while the pointer is in here
           (a click on the empty part of the strip still pauses / plays, like the rest of the film) */}

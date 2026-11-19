@@ -12,8 +12,9 @@ import {
   useScroll,
   useTransform,
 } from "motion/react";
-import { features, tools } from "@/content/site";
+import { features, PHONE_MEDIA, phoneVideoFor, posterFor, tools } from "@/content/site";
 import TitleRise, { type Piece } from "@/components/TitleRise";
+import Spinner from "@/components/Spinner";
 
 const TITLE: Piece[] = [{ t: "Selected", italic: true }, { t: "WORK" }];
 
@@ -33,8 +34,8 @@ function GiantTitle() {
 // every project on one curved glass wall: the case studies, then the tools (archived ones are left out)
 type Item = { key: string; name: string; tag?: string; img: string; bg: string; href?: string; video?: string };
 const items: Item[] = [
-  ...features.filter((f) => !("archived" in f && f.archived)).map((f) => ({ key: f.slug, name: f.name, tag: f.meta.split(" · ")[0], img: f.img, bg: f.bg, href: `/work/${f.slug}`, video: "video" in f ? f.video : undefined })),
-  ...tools.filter((t) => !("archived" in t && t.archived)).map((t) => ({ key: t.name, name: t.name, img: t.img, bg: t.bg, href: t.href, video: t.video })),
+  ...features.filter((f) => !("archived" in f && f.archived)).map((f) => ({ key: f.slug, name: f.name, tag: f.meta.split(" · ")[0], img: f.img || ("video" in f && f.video ? posterFor(f.video) : ""), bg: f.bg, href: `/work/${f.slug}`, video: "video" in f ? f.video : undefined })),
+  ...tools.filter((t) => !("archived" in t && t.archived)).map((t) => ({ key: t.name, name: t.name, img: t.img || (t.video ? posterFor(t.video) : ""), bg: t.bg, href: t.href, video: t.video })),
 ];
 const N = items.length;
 
@@ -131,6 +132,7 @@ export default function Work() {
   const [active, setActive] = useState(0);
   const [card, setCard] = useState({ w: 0, h: 0, mobile: false });
   const [gl, setGl] = useState(true);
+  const [loading, setLoading] = useState(false); // the front film is on its way (shows a spinner over the card)
   const section = useRef<HTMLElement>(null);
   const canvasBox = useRef<HTMLDivElement>(null);
   const videos = useRef(new Map<string, HTMLVideoElement>());
@@ -300,7 +302,7 @@ export default function Work() {
           video.loop = true;
           video.playsInline = true;
           video.preload = "none";
-          video.dataset.src = source;
+          video.dataset.src = window.matchMedia(PHONE_MEDIA).matches ? phoneVideoFor(source) : source; // phones get the 720p copy
           video.className = "pointer-events-none absolute inset-0 -z-10 h-px w-px opacity-0";
           host.appendChild(video);
           videos.current.set(items[i].key, video);
@@ -323,6 +325,11 @@ export default function Work() {
       // and the painted card shows until then) and pick up again when they come to the front. films further
       // away than the next panel aren't loaded at all. this keeps the browser from decoding every 1080p film at once
       let front = -1;
+      // a phone can refuse to start films on its own (e.g. iPhone Low Power Mode). then there's nothing to wait
+      // for: no spinner, the card keeps showing the film's still, and a tap anywhere (pointerup below) tries again
+      let blocked = false;
+      const onPlaying = () => { blocked = false; };
+      panels.forEach(({ video }) => video?.addEventListener("playing", onPlaying));
       const showVideos = (at: number) => {
         front = mod(Math.round(at));
         panels.forEach(({ video }, i) => {
@@ -332,7 +339,11 @@ export default function Work() {
           if (d < 0.5) video.preload = "auto";
           else if (video.preload === "none") video.preload = "metadata";
           if (!video.getAttribute("src") && video.dataset.src) video.src = video.dataset.src;
-          if (d < 0.5) { if (video.paused && !document.hidden) void video.play().catch(() => {}); }
+          if (d < 0.5) {
+            if (video.paused && !document.hidden) {
+              void video.play().catch((e: unknown) => { if (e instanceof DOMException && e.name === "NotAllowedError") blocked = true; });
+            }
+          }
           else video.pause();
         });
       };
@@ -379,9 +390,14 @@ export default function Work() {
 
       let raf = 0;
       let visible = true;
+      let wasLoading = false;
       const frame = () => {
         const at = pos.get();
         if (mod(Math.round(at)) !== front) showVideos(at);
+        // spinner while the front film should be playing but hasn't got enough to play yet
+        const fv = panels[front]?.video;
+        const nowLoading = !!fv && !blocked && !document.hidden && (fv.paused || fv.readyState < HTMLMediaElement.HAVE_FUTURE_DATA);
+        if (nowLoading !== wasLoading) { wasLoading = nowLoading; setLoading(nowLoading); }
         panels.forEach((panel, i) => {
           const { mesh, video, videoTexture } = panel;
           const d = wrap(i - at);
@@ -423,6 +439,7 @@ export default function Work() {
         cancelAnimationFrame(raf);
         io.disconnect();
         ro.disconnect();
+        panels.forEach(({ video }) => video?.removeEventListener("playing", onPlaying));
         document.removeEventListener("visibilitychange", resumeVideos);
         window.removeEventListener("pointerup", resumeVideos);
         window.removeEventListener("keydown", resumeVideos);
@@ -588,7 +605,10 @@ export default function Work() {
         {!gl && (
           <div className="absolute left-1/2 top-1/2 flex aspect-[16/10] w-[70%] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[14px]" style={{ background: cur.bg }}>
             {cur.video ? (
-              <video ref={fallbackVideo} key={cur.video} src={cur.video} muted loop playsInline autoPlay className="h-full w-full rounded-[inherit] object-cover" />
+              <video ref={fallbackVideo} key={cur.video} poster={cur.img || undefined} muted loop playsInline autoPlay className="h-full w-full rounded-[inherit] object-cover">
+                <source src={phoneVideoFor(cur.video)} type="video/mp4" media={PHONE_MEDIA} />
+                <source src={cur.video} type="video/mp4" />
+              </video>
             ) : (
               <span className="label text-mauve">[ {cur.name} — 16:10 image ]</span>
             )}
@@ -614,6 +634,13 @@ export default function Work() {
           ) : (
             <span tabIndex={0} aria-label={cur.name} onPointerEnter={() => (overMiddle.current = true)} onPointerLeave={() => (overMiddle.current = false)} className="absolute left-1/2 top-1/2 z-10 rounded-[14px]" style={{ width: card.w, height: card.h, marginLeft: -card.w / 2, marginTop: -hh }} />
           )
+        )}
+
+        {/* loading ring over the middle panel while its film is on its way (the card shows the film's still meanwhile) */}
+        {card.w > 0 && gl && (
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-[11] grid place-items-center" style={{ width: card.w, height: card.h, marginLeft: -card.w / 2, marginTop: -hh }}>
+            <Spinner show={loading} />
+          </div>
         )}
 
         {/* huge name sitting just above the middle panel (clear of its curved top edge) */}
