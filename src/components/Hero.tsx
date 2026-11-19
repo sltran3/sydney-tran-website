@@ -65,6 +65,10 @@ export default function Hero() {
   const calm = useReducedMotion();
   // "pending" until we know whether to play the intro; matches the server render
   const [mode, setMode] = useState<"pending" | "intro" | "skip">("pending");
+  // which mode the chrome name has appeared in: "Scroll" waits for the name (the hero remounts per mode, so a
+  // name that appeared before the mode was known doesn't count)
+  const [logoShownIn, setLogoShownIn] = useState<string | null>(null);
+  const logoIn = logoShownIn === mode;
 
   // runs before the first paint, so a skipped intro never flashes its start frame
   const decided = useRef<"intro" | "skip" | null>(null); // survives React's dev double-run of effects
@@ -157,13 +161,20 @@ export default function Hero() {
               <div className="logo-sway">
                 {/* the 3D chrome name: poofs in when it's ready (after the sky climb on a first visit), turns toward
                     the mouse, and a real light follows the cursor while hovered */}
-                <Logo3D tilt={tilt} appearAt={mode === "intro" ? RISE + 0.2 : 0} />
+                <Logo3D tilt={tilt} appearAt={mode === "intro" ? RISE + 0.2 : 0} onShown={() => setLogoShownIn(mode)} />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-[130px] z-[6] flex flex-col items-center gap-2.5 text-center max-sm:bottom-auto max-sm:top-[calc(100svh-190px)]">
+        {/* "Scroll" fades up only once the chrome name has appeared, about halfway into the name's reveal */}
+        <motion.div
+          className="pointer-events-none absolute inset-x-0 bottom-[130px] z-[6] flex flex-col items-center gap-2.5 text-center max-sm:bottom-auto max-sm:top-[calc(100svh-190px)]"
+          initial={{ opacity: 0, y: 10 }}
+          animate={logoIn ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+          transition={{ duration: calm ? 0 : 0.9, delay: logoIn && !calm ? 0.7 : 0, ease: [0.2, 0.7, 0.2, 1] }}
+          inert={!logoIn}
+        >
           <a
             href="#about"
             aria-label="Scroll to about"
@@ -175,7 +186,7 @@ export default function Hero() {
               <span className="absolute bottom-px left-1/2 size-2 -translate-x-1/2 rotate-45 border-b border-r border-current" />
             </span>
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

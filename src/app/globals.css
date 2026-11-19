@@ -145,6 +145,10 @@ body {
   .poof-in { animation: poof-fade 0.5s ease both; }
   .poof-puff, .poof-spark, .poof-veil { display: none; }
 }
+/* the "click me" note by the chrome shape: a slow, small bob */
+@keyframes hint-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+.hint-bob { display: inline-block; animation: hint-bob 2.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .hint-bob { animation: none; } }
 @keyframes poof-fade { from { opacity: 0; } to { opacity: 1; } }
 
 /* header veil: frosted wash that fades out, no hard edge */

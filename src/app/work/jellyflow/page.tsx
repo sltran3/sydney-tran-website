@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import DecisionView from "@/components/DecisionView";
 import Nav from "@/components/Nav";
+import CaseVideo from "@/components/CaseVideo";
+import { nextCaseStudy } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Jellyflow | Sydney Tran",
@@ -15,6 +17,8 @@ const facts = [
   ["Year", "2026"],
 ];
 
+const next = nextCaseStudy("/work/jellyflow");
+
 export default function JellyflowCaseStudy() {
   return (
     <main className="bg-paper">
@@ -22,17 +26,8 @@ export default function JellyflowCaseStudy() {
       <header className="mx-auto max-w-[1200px] px-6 pb-10 pt-36 sm:px-12">
         <h1 className="font-serif text-[clamp(64px,8vw,120px)] leading-[0.95] tracking-tight">Jellyflow</h1>
         <p className="mt-3.5 font-serif text-[38px] italic">Making studying feel like a little adventure.</p>
-        {/* the project's film: plays silently on a loop, like a moving cover image */}
-        <video
-          src="/videos/carousel/jellyflow-portfolio-reel.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-label="Jellyflow: a short film of the project"
-          className="mt-12 aspect-video w-full rounded-[10px] bg-lilac object-cover"
-        />
+        {/* the project's film: plays silently on a loop, with its own pause / skip controls */}
+        <CaseVideo src="/videos/carousel/jellyflow-portfolio-reel.mp4" label="Jellyflow: a short film of the project" className="mt-12" />
         <dl className="mt-9 grid grid-cols-2 gap-6 md:grid-cols-4">
           {facts.map(([label, value]) => (
             <div key={label} className="border-t border-ink/20 pt-3.5">
@@ -144,7 +139,7 @@ export default function JellyflowCaseStudy() {
 
       <footer className="label flex flex-wrap justify-between gap-3 px-6 py-12 sm:px-12">
         <Link href="/#work" className="inline-flex min-h-11 items-center">← All work</Link>
-        <Link href="/work/life-dashboard" className="inline-flex min-h-11 items-center">Next: Life Dashboard →</Link>
+        <Link href={next.href} className="inline-flex min-h-11 items-center">Next: {next.name} →</Link>
       </footer>
     </main>
   );

@@ -40,9 +40,10 @@ const SPARKS = [
   [6, 82, -100, 60, 0.16], [44, 98, -20, 110, 0.22], [72, 96, 50, 100, 0.15], [96, 70, 110, 40, 0.19],
 ] as const;
 
-export default function Logo3D({ tilt, appearAt = 0 }: {
+export default function Logo3D({ tilt, appearAt = 0, onShown }: {
   tilt: { x: number; y: number };
   appearAt?: number; // seconds to wait before it may appear (so it poofs in after the opening sky climb, not hidden behind it)
+  onShown?: () => void; // called once the name starts appearing (the hero waits for this before showing "Scroll")
 }) {
   const box = useRef<HTMLDivElement>(null);
   const holder = useRef<HTMLDivElement>(null);
@@ -53,6 +54,7 @@ export default function Logo3D({ tilt, appearAt = 0 }: {
   const [fallback, setFallback] = useState(false); // 3D is taking too long (or can't run): poof in the still instead
   const shown = due && (ready || fallback);
   const [popped, setPopped] = useState(false); // the pop-in animation has finished
+  useEffect(() => { if (shown) onShown?.(); }, [shown, onShown]);
 
   useEffect(() => {
     const a = setTimeout(() => setDue(true), appearAt * 1000);

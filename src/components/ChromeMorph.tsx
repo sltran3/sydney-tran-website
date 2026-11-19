@@ -49,11 +49,16 @@ export default function ChromeMorph() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const next = useRef<() => void>(() => {});
   const hover = useRef(false);
+  const hintRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const button = buttonRef.current;
-    if (!canvas || !button) return;
+    const hint = hintRef.current;
+    if (!canvas || !button || !hint) return;
+    // the "click me" note: shown until the shape has been clicked once (remembered on this browser)
+    let clickedOnce = false;
+    try { clickedOnce = localStorage.getItem("chrome-clicked") === "1"; } catch {}
     const fine = window.matchMedia("(pointer: fine)").matches; // touch screens have no cursor to follow
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let dead = false;
@@ -153,6 +158,7 @@ export default function ChromeMorph() {
         button.style.opacity = shown ? "1" : "0";
         button.style.pointerEvents = shown ? "auto" : "none";
         button.tabIndex = shown ? 0 : -1;
+        hint.style.opacity = shown && !clickedOnce ? "1" : "0";
       };
 
       // ---- the cursor ----
@@ -180,6 +186,9 @@ export default function ChromeMorph() {
         cInset = small ? CORNER_INSET_SMALL : CORNER_INSET;
         const hit = Math.round(cSize * 2.6); // the click target, a little bigger than the object
         Object.assign(button.style, { width: `${hit}px`, height: `${hit}px`, right: `${cInset - hit / 2}px`, bottom: `${cInset - hit / 2}px` });
+        // the note sits up and to the left; its arrow's tip (the bottom-right corner of the note, ~4px in) comes down
+        // onto the top middle of the shape, stopping just above it so the bob never touches
+        Object.assign(hint.style, { right: `${cInset - 4}px`, bottom: `${cInset + cSize + 5}px` });
         renderer.setSize(W, H, false);
         cam.aspect = W / H;
         cam.position.set(0, 0, H / (2 * Math.tan((cam.fov * Math.PI) / 360)));
@@ -204,6 +213,11 @@ export default function ChromeMorph() {
         p = 0;
         if (calm) p = 1; // no animation: swap straight to the new shape
         growV -= 4; // a little press-in on the click
+        if (!clickedOnce) {
+          clickedOnce = true;
+          hint.style.opacity = "0";
+          try { localStorage.setItem("chrome-clicked", "1"); } catch {}
+        }
       };
       const clamp = THREE.MathUtils.clamp;
 
@@ -389,6 +403,20 @@ export default function ChromeMorph() {
         // full-screen, see-through layer for the objects and the swipe; never catches clicks
         className="pointer-events-none fixed inset-0 z-[60] h-screen w-screen opacity-0 transition-opacity duration-500"
       />
+      {/* a hand-written note pointing at the corner object, until it's been clicked once */}
+      <div
+        ref={hintRef}
+        aria-hidden
+        style={{ right: 100, bottom: 80 }}
+        className="pointer-events-none fixed z-[61] flex items-start gap-0.5 text-mauve opacity-0 transition-opacity duration-700"
+      >
+        <span className="hint-bob -mt-1 font-serif text-[13px] italic leading-none whitespace-nowrap sm:text-[15px]">click me</span>
+        {/* arrow: out to the right, then curving down onto the shape; tip at (34, 36) */}
+        <svg viewBox="0 0 40 40" className="size-6 sm:size-[30px]" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M2 6 C 18 0, 32 5, 34 35" />
+          <path d="M29.5 29.5 L 34 36 L 38.5 29.5" />
+        </svg>
+      </div>
       {/* the click target over the corner object (the object itself is drawn on the canvas) */}
       <button
         ref={buttonRef}

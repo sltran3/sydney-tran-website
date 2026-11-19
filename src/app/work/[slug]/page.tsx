@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import DecisionView from "@/components/DecisionView";
-import { studies } from "@/content/site";
+import { nextCaseStudy, studies } from "@/content/site";
+import CaseVideo from "@/components/CaseVideo";
 
 // make a page for each case study at build time
 export function generateStaticParams() {
@@ -14,9 +15,7 @@ export default async function CaseStudy(props: PageProps<"/work/[slug]">) {
   const i = studies.findIndex((s) => s.slug === slug);
   if (i < 0) notFound();
   const s = studies[i];
-  // "Next" skips archived case studies (an archived page itself still opens by its address)
-  const shown = studies.filter((x) => !x.archived);
-  const next = shown.find((x) => studies.indexOf(x) > i) ?? shown[0];
+  const next = nextCaseStudy(`/work/${s.slug}`); // same order as the carousel, Jellyflow included
 
   const facts = [
     ["Client", s.client],
@@ -36,17 +35,8 @@ export default async function CaseStudy(props: PageProps<"/work/[slug]">) {
         <p className="mt-3.5 font-serif text-[38px] italic">{s.outcome}</p>
         {s.description && <p className="mt-4 max-w-[54ch] text-lg">{s.description}</p>}
         {s.video ? (
-          // the project's film: plays silently on a loop, like a moving cover image
-          <video
-            src={s.video}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            aria-label={`${s.name}: a short film of the project`}
-            className="mt-12 aspect-video w-full rounded-[10px] bg-lilac object-cover"
-          />
+          // the project's film: plays silently on a loop, with its own pause / skip controls
+          <CaseVideo src={s.video} label={`${s.name}: a short film of the project`} className="mt-12" />
         ) : (
           <div className="mt-12 flex aspect-video items-center justify-center rounded-[10px] bg-gradient-to-br from-pink to-lilac">
             {!s.blankImages && <span className="label">[ Hero mockup — 2880 × 1620 ]</span>}
@@ -116,7 +106,7 @@ export default async function CaseStudy(props: PageProps<"/work/[slug]">) {
 
       <footer className="label flex flex-wrap justify-between gap-3 px-12 py-12">
         <Link href="/#work" className="inline-flex min-h-11 items-center">← All work</Link>
-        <Link href={`/work/${next.slug}`} className="inline-flex min-h-11 items-center">Next: {next.name} →</Link>
+        <Link href={next.href} className="inline-flex min-h-11 items-center">Next: {next.name} →</Link>
       </footer>
     </main>
   );

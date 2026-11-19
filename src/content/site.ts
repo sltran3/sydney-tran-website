@@ -326,6 +326,17 @@ export const studies: Study[] = [
   },
 ];
 
+// the "Next" link at the bottom of each case study walks through these in order (same order as the carousel),
+// then loops back to the start. Jellyflow has its own page, so it's listed here by hand
+export const caseStudyOrder: { href: string; name: string }[] = [
+  ...studies.filter((s) => !s.archived).map((s) => ({ href: `/work/${s.slug}`, name: s.name })),
+  { href: "/work/jellyflow", name: "Jellyflow" },
+];
+export function nextCaseStudy(href: string) {
+  const i = caseStudyOrder.findIndex((s) => s.href === href);
+  return caseStudyOrder[(i + 1) % caseStudyOrder.length]; // an archived page (not in the list) points to the first
+}
+
 // craft gallery (4:5 images)
 export const craft = [
   { title: "Liquid Signature", cap: "Five chrome lighting tests", img: "/img/wordmark.webp", bg: "#D7CADC" },
