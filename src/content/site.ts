@@ -164,44 +164,44 @@ export const studies: Study[] = [
     },
     decisions: [
       {
-        title: "01 — Figuring out what I actually needed",
+        title: "01. Figuring out what I actually needed",
         design: "I started by thinking about the tools I used most often and what information I wanted to see when I opened my dashboard.\n\nI didn't want to overcrowd the page with features I wouldn't use, so I focused on bringing my everyday study tools together in a way that made sense.",
         build: "One of the main things I wanted was to be able to see my daily tasks and habits without having to navigate through different pages.\n\nI experimented with different widget arrangements to figure out which information should be the most visible and which tools could take up less space.",
         dropped: "",
-        designImg: "",
-        buildImg: ""
+        designImg: "/img/dashboard/01-full-dashboard.webp",
+        buildImg: "/img/dashboard/01-full-dashboard.webp"
       },
       {
-        title: "02 — Finding the right visual direction",
+        title: "02. Finding the right visual direction",
         design: "One of my biggest goals was making the dashboard feel different from a typical productivity app.\n\nI experimented with a cozy café concept, using soft colors and illustrated elements to make the interface feel more like a personal workspace.",
         build: "I tried different backgrounds and decorative assets, but some of the earlier designs felt too busy or didn't fit together.\n\nI ended up simplifying the illustrations and adjusting the color palette so the design still had personality without distracting from the actual tools.",
         dropped: "",
-        designImg: "",
-        buildImg: ""
+        designImg: "/img/dashboard/02-visual-direction.webp",
+        buildImg: "/img/dashboard/02-visual-direction.webp"
       },
       {
-        title: "03 — Organizing the dashboard",
+        title: "03. Organizing the dashboard",
         design: "Once I had a visual direction, I worked on arranging the different widgets so the dashboard felt organized.\n\nI wanted the most important information to be easy to find without everything competing for attention.",
         build: "I experimented with different layouts and adjusted the sizing and placement of each section to create a better visual hierarchy.\n\nOne of the things I focused on was making the widgets feel like they belonged in the same interface instead of looking like separate apps placed next to each other.",
         dropped: "",
-        designImg: "",
-        buildImg: ""
+        designImg: "/img/dashboard/03-widget-layout.webp",
+        buildImg: "/img/dashboard/03-widget-layout.webp"
       },
       {
-        title: "04 — Making habit tracking more visual",
+        title: "04. Making habit tracking more visual",
         design: "I wanted habit tracking to be something I could understand at a glance rather than having to read through a list every day.\n\nI explored a calendar-style habit tracker where I could see my progress over time.",
         build: "This made the feature feel more connected to the rest of the dashboard and gave me a clearer way to look at my consistency.\n\nI also wanted the interaction to feel simple enough that updating a habit wouldn't become another task on its own.",
         dropped: "",
-        designImg: "",
-        buildImg: ""
+        designImg: "/img/dashboard/04-habit-tracker.webp",
+        buildImg: "/img/dashboard/04-habit-tracker.webp"
       },
       {
-        title: "05 — Bringing the design to life",
+        title: "05. Bringing the design to life",
         design: "After experimenting with the layouts in Figma, I worked on translating the design into a functional web interface.\n\nOne challenge was balancing the decorative elements with the actual dashboard components. Some illustrations looked good on their own but took up too much space or made the layout feel crowded.",
         build: "I kept adjusting the placement of the widgets and the surrounding artwork until the design felt more cohesive.\n\nI wanted the final interface to keep the feeling of a cozy workspace while still being practical to navigate.",
         dropped: "",
-        designImg: "",
-        buildImg: ""
+        designImg: "/img/dashboard/05-syllabus-import.webp",
+        buildImg: "/img/dashboard/05-syllabus-import.webp"
       }
     ],
     changedHeading: "Everything in one little workspace.",
@@ -252,7 +252,7 @@ export const studies: Study[] = [
     },
     decisions: [
       {
-        title: "01 — Making patient records easier to navigate",
+        title: "01. Making patient records easier to navigate",
         design: "The original interface displayed each patient in a large card with multiple fields visible at once.\n\nI felt like this made it harder to quickly find information, especially when working through a large batch of patients.",
         build: "For Clearline, I explored a more compact layout where patients appeared in collapsible rows, with their most important details visible without needing to open each record.\n\nI also designed a search feature that would let staff find a patient by name, member ID, or date of birth.\n\nI wanted users to be able to find the exact record they needed instead of scrolling through the entire page.",
         dropped: "",
@@ -260,7 +260,7 @@ export const studies: Study[] = [
         buildImg: "/img/clearline/01-batch-overview.webp"
       },
       {
-        title: "02 — Simplifying copy and paste",
+        title: "02. Simplifying copy and paste",
         design: "One part of the client's workflow involved transferring patient information from our tool into Availity to check insurance eligibility.\n\nSince staff still needed to enter certain information manually, I wanted to make this process as easy as possible.",
         build: "I designed copy-to-clipboard buttons beside individual patient fields so users could quickly copy information into Availity.\n\nI also simplified how the fields were displayed, replacing the larger boxed layout with more compact rows.\n\nThis was one of the smaller features I worked on, but I liked how it addressed a task the client would have to repeat for almost every patient.",
         dropped: "",
@@ -268,7 +268,7 @@ export const studies: Study[] = [
         buildImg: "/img/clearline/02-copy-into-availity.webp"
       },
       {
-        title: "03 — Making PDF review more intuitive",
+        title: "03. Making PDF review more intuitive",
         design: "Another important part of the workflow was making sure staff could easily verify the information extracted from the original document.\n\nIn the earlier interface, the extracted fields weren't connected to their locations in the PDF, so users had to look through the document themselves.",
         build: "I explored a side-by-side layout where staff could review the extracted information while keeping the original PDF visible.\n\nI also wanted to include zoom controls so users could look more closely at smaller text without leaving the review screen.\n\nFor individual fields, I explored linking the extracted values to the relevant locations in the document.\n\nThe goal was to make checking a value feel like one continuous interaction rather than switching back and forth between different views.",
         dropped: "",
@@ -276,7 +276,7 @@ export const studies: Study[] = [
         buildImg: "/img/clearline/03-pdf-side-by-side.webp"
       },
       {
-        title: "04 — Helping staff keep track of their work",
+        title: "04. Helping staff keep track of their work",
         design: "I wanted Clearline to make it obvious which patients had already been reviewed and which ones still needed attention.\n\nFor the eligibility workflow, I redesigned the patient list around a more straightforward review process.",
         build: "Instead of keeping every patient expanded, users could open one record, copy the information they needed, and save the eligibility result.\n\nThe completed patient would then move into a separate Done section, and the next unchecked record could be opened.\n\nI also explored making low-confidence and missing fields stand out during PDF review, while keeping high-confidence information visually quieter.\n\nI wanted the interface to guide users toward what needed their attention without making everything look equally urgent.",
         dropped: "",
@@ -284,7 +284,7 @@ export const studies: Study[] = [
         buildImg: "/img/clearline/04-needs-review.webp"
       },
       {
-        title: "05 — Connecting the workflow through Clearline",
+        title: "05. Connecting the workflow through Clearline",
         design: "As I worked on the individual screens, I started thinking about how staff would navigate the product from the moment they opened it.\n\nThe original tool opened directly into a batch of records, without a clear starting point or a way to return to previous work.",
         build: "For Clearline, I explored a home screen where users could upload a new PDF batch, reopen previous batches, and resume an unfinished review.\n\nI developed different layout concepts to compare how the information could be organized.\n\nI leaned toward a work-queue layout because it made better use of the available space and allowed users to see more records at once.\n\nI wanted the product to feel like one connected workspace instead of a collection of separate pages.",
         dropped: "",

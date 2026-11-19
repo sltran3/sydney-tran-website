@@ -114,11 +114,11 @@ body {
 
 
 /* the 3D name's entrance: a poof of cloud puffs and sparkles, and the name popping out of it (Logo3D) */
+/* a soft reveal: fades up and comes into focus out of the cloud, settling without any bounce */
 @keyframes poof-in {
-  0% { opacity: 0; transform: scale(0.5); filter: blur(14px); animation-timing-function: cubic-bezier(0.3, 0.7, 0.4, 1); }
-  20% { opacity: 1; }
-  60% { transform: scale(1.06); filter: blur(0); animation-timing-function: ease-in-out; }
-  100% { opacity: 1; transform: scale(1); filter: blur(0); }
+  0% { opacity: 0; transform: translateY(2%) scale(0.94); filter: blur(10px); }
+  45% { opacity: 1; }
+  100% { opacity: 1; transform: none; filter: blur(0); }
 }
 @keyframes poof-veil {
   0% { opacity: 0; transform: translate(0, 0) scale(0.3); }
@@ -137,7 +137,7 @@ body {
 }
 /* "backwards", not "both": once the pop-in ends, no scale or blur is left on the name. a leftover (even scale(1) /
    blur(0)) keeps the 3D canvas on a cached layer, which can make the chrome look soft */
-.poof-in { animation: poof-in 0.9s backwards; animation-delay: 0.08s; }
+.poof-in { animation: poof-in 1.4s cubic-bezier(0.22, 0.61, 0.24, 1) backwards; animation-delay: 0.08s; }
 .poof-veil { animation: poof-veil 0.85s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
 .poof-puff { animation: poof-puff 1.3s cubic-bezier(0.15, 0.8, 0.3, 1) both; }
 .poof-spark { animation: poof-spark 0.9s ease-out both; }

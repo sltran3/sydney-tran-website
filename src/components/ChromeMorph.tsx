@@ -24,6 +24,7 @@ const CORNER_INSET_SMALL = 38;
 const SIZE = 19; // px per unit: the shape is about 36px across
 const FOLLOW_STIFF = 700; // a tight spring: it stays right under the cursor, with just a hint of lag
 const FOLLOW_DAMP = 48;
+const FOLLOW_STEP = 1 / 240; // s: the follow spring is stepped at least this finely, whatever the frame rate
 
 // the swipe: one tube of chrome laid along the cursor's path. the physics, per point along it:
 //  - it's laid down carrying part of the blob's velocity, so the stroke keeps flowing for a moment
@@ -68,7 +69,8 @@ export default function ChromeMorph() {
 
       // ---- scene: a full-screen layer where 1 world unit = 1 screen pixel on the z = 0 plane ----
       const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      // 1.5×, not 2×: this canvas covers the whole screen, and the objects on it are small, shiny and moving
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       const scene = new THREE.Scene();
       const cam = new THREE.PerspectiveCamera(35, 1, 1, 10000);
@@ -194,6 +196,7 @@ export default function ChromeMorph() {
       const P = posAttr.array as Float32Array, N = nrmAttr.array as Float32Array;
       const fromP = shapes[0].slice(), fromN = normals[0].slice();
       let target = 0;
+      let settledOn = -1; // the shape the surface last finished settling on (-1 while morphing)
       let p = 1, v = 0, rotV = 0, time = 0, last = performance.now(), raf = 0, grow = 1, growV = 0;
       next.current = () => {
         fromP.set(P); fromN.set(N);
@@ -206,19 +209,29 @@ export default function ChromeMorph() {
 
       const frame = (now: number) => {
         raf = requestAnimationFrame(frame);
+        if (!shown || document.hidden) { last = now; return; } // nothing to draw: skip the work
+        // at rest (cursor still or away, no swipe, no morph, no click bounce) the only motion is the slow spin and
+        // bob, which looks the same at half the frame rate: draw every other frame and save the GPU the rest
+        const resting = pts === 0 && v === 0 && Math.abs(growV) < 0.01 &&
+          (!mouse.in || (Math.abs(mouse.x - follow.x) < 0.05 && Math.abs(mouse.y - follow.y) < 0.05 && Math.hypot(follow.vx, follow.vy) < 0.5));
+        if (resting && now - last < 30) return;
         const dt = Math.min((now - last) / 1000, 1 / 30);
         last = now;
-        if (!shown || document.hidden) return; // nothing to draw: skip the work
         time += dt;
 
         // ---- follow: a tight spring right under the cursor ----
         const px = follow.x, py = follow.y;
         if (calm) { follow.x = mouse.x; follow.y = mouse.y; follow.vx = follow.vy = 0; }
         else {
-          follow.vx += ((mouse.x - follow.x) * FOLLOW_STIFF - follow.vx * FOLLOW_DAMP) * dt;
-          follow.vy += ((mouse.y - follow.y) * FOLLOW_STIFF - follow.vy * FOLLOW_DAMP) * dt;
-          follow.x += follow.vx * dt;
-          follow.y += follow.vy * dt;
+          // small fixed sub-steps: a stiff spring stepped in one big jump (a slow frame) overshoots and flips
+          // direction every frame, which made the blob (and the swipe it lays down) jitter back and forth
+          const subs = Math.ceil(dt / FOLLOW_STEP), h = dt / subs;
+          for (let s = 0; s < subs; s++) {
+            follow.vx += ((mouse.x - follow.x) * FOLLOW_STIFF - follow.vx * FOLLOW_DAMP) * h;
+            follow.vy += ((mouse.y - follow.y) * FOLLOW_STIFF - follow.vy * FOLLOW_DAMP) * h;
+            follow.x += follow.vx * h;
+            follow.y += follow.vy * h;
+          }
         }
         holder.visible = mouse.in;
         holder.position.set(wx(follow.x), wy(follow.y), 0);
@@ -227,7 +240,8 @@ export default function ChromeMorph() {
         // ---- the blob stretches along its motion (constant volume) and leans into it ----
         if (!calm) {
           const sx = 1 + clamp(speed / 2600, 0, 0.4);
-          const ang = Math.atan2(-follow.vy, follow.vx); // world y is up
+          // only re-aim while actually moving: near zero speed the direction is just noise
+          const ang = speed > 20 ? Math.atan2(-follow.vy, follow.vx) : stretch.rotation.z; // world y is up
           stretch.rotation.z = ang;
           stretch.scale.set(sx, 1 / Math.sqrt(sx), 1 / Math.sqrt(sx));
           unturn.rotation.z = -ang;
@@ -299,10 +313,14 @@ export default function ChromeMorph() {
         const acc = STIFF * (1 - p) - DAMP * v;
         v += acc * dt;
         p += v * dt;
+        if (Math.abs(v) < 1e-3 && Math.abs(1 - p) < 1e-3) { p = 1; v = 0; }
         const t = clamp(p, 0, 1);
         const B = shapes[target], NB = normals[target];
         const amp = calm ? 0 : WOBBLE * Math.min(Math.abs(v), 3);
-        for (let kk = 0; kk < n; kk++) {
+        // once the morph has settled the surface stops changing: skip rewriting ~23k vertices every frame
+        const morphing = !(p === 1 && v === 0 && settledOn === target);
+        if (morphing) settledOn = p === 1 && v === 0 ? target : -1;
+        for (let kk = 0; morphing && kk < n; kk++) {
           const j = kk * 3;
           const front = dirs[j + 1] * 0.5 + 0.5; // the top changes a bit before the bottom, like flowing metal
           let lt = clamp((t - (1 - front) * 0.35) / 0.65, 0, 1);
@@ -321,8 +339,7 @@ export default function ChromeMorph() {
           N[j + 1] = fromN[j + 1] + (NB[j + 1] - fromN[j + 1]) * lt;
           N[j + 2] = fromN[j + 2] + (NB[j + 2] - fromN[j + 2]) * lt;
         }
-        posAttr.needsUpdate = true;
-        nrmAttr.needsUpdate = true;
+        if (morphing) { posAttr.needsUpdate = true; nrmAttr.needsUpdate = true; }
         const squash = 1 + clamp(v * 0.08, -0.15, 0.15);
         mesh.scale.set(1 / Math.sqrt(squash), squash, 1 / Math.sqrt(squash));
         cornerMesh.scale.copy(mesh.scale);

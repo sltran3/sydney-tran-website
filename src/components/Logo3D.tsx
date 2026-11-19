@@ -71,6 +71,8 @@ export default function Logo3D({ tilt, appearAt = 0 }: {
     (async () => {
       const THREE = await import("three");
       const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+      // the model file is meshopt-compressed (2 MB instead of 7.7 MB, same points and triangles)
+      const { MeshoptDecoder } = await import("three/examples/jsm/libs/meshopt_decoder.module.js");
       const { makeChromeRoom } = await import("@/components/chromeRoom"); // loaded here too, so three.js stays out of the first download
       if (dead) return;
 
@@ -126,7 +128,7 @@ export default function Logo3D({ tilt, appearAt = 0 }: {
 
       let model: InstanceType<typeof THREE.Group>;
       try {
-        model = (await new GLTFLoader().loadAsync(MODEL)).scene;
+        model = (await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(MODEL)).scene;
       } catch {
         renderer.dispose();
         pmrem.dispose();
@@ -164,6 +166,11 @@ export default function Logo3D({ tilt, appearAt = 0 }: {
       fit();
       const ro = new ResizeObserver(fit);
       ro.observe(host);
+
+      // build the chrome shaders now, off the main thread where the browser can, so the first frame doesn't
+      // freeze the page in the middle of the logo's entrance
+      try { await renderer.compileAsync(scene, camera); } catch {}
+      if (dead) { ro.disconnect(); renderer.dispose(); pmrem.dispose(); return; }
 
       // follow the tilt smoothly; place the cursor light just in front of the metal
       const aim = new THREE.Vector3();

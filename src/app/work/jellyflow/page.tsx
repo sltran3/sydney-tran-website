@@ -80,7 +80,7 @@ export default function JellyflowCaseStudy() {
       <section className="mx-auto max-w-[1200px] px-6 pb-20 sm:px-12">
         <h2 className="label mb-3.5 text-mauve">04 / Design Process</h2>
         <DecisionView blankImages d={{
-          title: "01 — Creating the underwater world",
+          title: "01. Creating the underwater world",
           design: <>
             <p>One of the first things I worked on was figuring out how the environment would look as players moved deeper into the ocean.</p>
             <p>I wanted the game to have a soft, hand-painted style similar to <em>Ponyo</em>, rather than the typical pixel-art style used in a lot of games.</p>
@@ -89,11 +89,11 @@ export default function JellyflowCaseStudy() {
             <p>I experimented with different ocean backgrounds and lighting to make each depth feel different while still looking like one continuous environment.</p>
             <p>One challenge was making sure the backgrounds connected without noticeable lines or sudden color changes. I ended up separating the environment into different sections so I could adjust each part individually.</p>
           </>,
-          designImg: "",
-          buildImg: "",
+          designImg: "/img/jellyflow/01-underwater-world.webp",
+          buildImg: "/img/jellyflow/01-underwater-world.webp",
         }} />
         <DecisionView blankImages d={{
-          title: "02 — Designing the characters",
+          title: "02. Designing the characters",
           design: <>
             <p>I wanted the sea creatures to feel like they belonged in the same world, so I spent time experimenting with their shapes and expressions.</p>
             <p>I designed characters like a pufferfish, seahorse, and jellyfish, making adjustments to their proportions until they felt consistent with the overall art style.</p>
@@ -102,11 +102,11 @@ export default function JellyflowCaseStudy() {
             <p>A lot of the process involved small changes, like adjusting the shape of a character&apos;s face or making sure its features were still recognizable at a smaller size.</p>
             <p>I also created the characters as separate assets so they could move independently from the background.</p>
           </>,
-          designImg: "",
-          buildImg: "",
+          designImg: "/img/jellyflow/02-characters.webp",
+          buildImg: "/img/jellyflow/02-characters.webp",
         }} />
         <DecisionView blankImages d={{
-          title: "03 — Making the environment feel continuous",
+          title: "03. Making the environment feel continuous",
           design: <>
             <p>One of the harder parts was creating a long underwater environment that didn&apos;t feel repetitive.</p>
             <p>I didn&apos;t want players to keep seeing the same background as they moved through the game, so I created different decorative elements that could be placed throughout the ocean.</p>
@@ -115,11 +115,11 @@ export default function JellyflowCaseStudy() {
             <p>I also worked on how the lighting changed with depth. The deeper areas have darker colors and glowing elements, which helps make the transition feel more natural.</p>
             <p>This was one of the parts I spent the most time adjusting because even small differences between sections could make the environment look disconnected.</p>
           </>,
-          designImg: "",
-          buildImg: "",
+          designImg: "/img/jellyflow/03-deeper-waters.webp",
+          buildImg: "/img/jellyflow/03-deeper-waters.webp",
         }} />
         <DecisionView blankImages d={{
-          title: "04 — Bringing everything together",
+          title: "04. Bringing everything together",
           design: <>
             <p>After creating the visual assets, I worked on bringing them into the game and making sure everything looked consistent together.</p>
             <p>I had to think about how the characters would fit into the environment and how the different background sections would work as players moved through them.</p>
@@ -128,8 +128,8 @@ export default function JellyflowCaseStudy() {
             <p>I also wanted the interface to stay simple because the underwater environment already has a lot of visual details.</p>
             <p>My goal was to make the game feel playful without making it difficult to understand or use.</p>
           </>,
-          designImg: "",
-          buildImg: "",
+          designImg: "/img/jellyflow/04-game-interface.webp",
+          buildImg: "/img/jellyflow/04-game-interface.webp",
         }} />
       </section>
 

@@ -295,12 +295,12 @@ export default function Work() {
         const source = items[i].video;
         const video = source ? document.createElement("video") : null;
         if (video && source) {
+          // no src yet: showVideos() below loads each film only once its panel is in front or next to it
           video.muted = true;
           video.loop = true;
           video.playsInline = true;
-          video.autoplay = true;
-          video.preload = "auto";
-          video.src = source;
+          video.preload = "none";
+          video.dataset.src = source;
           video.className = "pointer-events-none absolute inset-0 -z-10 h-px w-px opacity-0";
           host.appendChild(video);
           videos.current.set(items[i].key, video);
@@ -319,11 +319,26 @@ export default function Work() {
         return { mesh: m, tex, video, videoTexture };
       });
 
+      // only the film in front plays; the ones behind it pause (they load just enough to show a still frame,
+      // and the painted card shows until then) and pick up again when they come to the front. films further
+      // away than the next panel aren't loaded at all. this keeps the browser from decoding every 1080p film at once
+      let front = -1;
+      const showVideos = (at: number) => {
+        front = mod(Math.round(at));
+        panels.forEach(({ video }, i) => {
+          if (!video) return;
+          const d = Math.abs(wrap(i - front));
+          if (d > 1.5) { video.pause(); return; }
+          if (d < 0.5) video.preload = "auto";
+          else if (video.preload === "none") video.preload = "metadata";
+          if (!video.getAttribute("src") && video.dataset.src) video.src = video.dataset.src;
+          if (d < 0.5) { if (video.paused && !document.hidden) void video.play().catch(() => {}); }
+          else video.pause();
+        });
+      };
       const resumeVideos = () => {
         if (document.hidden) return;
-        panels.forEach(({ video }) => {
-          if (video?.paused) void video.play().catch(() => {});
-        });
+        showVideos(pos.get());
       };
       resumeVideos();
       document.addEventListener("visibilitychange", resumeVideos);
@@ -366,6 +381,7 @@ export default function Work() {
       let visible = true;
       const frame = () => {
         const at = pos.get();
+        if (mod(Math.round(at)) !== front) showVideos(at);
         panels.forEach((panel, i) => {
           const { mesh, video, videoTexture } = panel;
           const d = wrap(i - at);
@@ -379,6 +395,7 @@ export default function Work() {
             uniforms.uMediaScale.value.set(Math.min(1, 1 / ratio), Math.min(1, ratio));
             uniforms.map.value = videoTexture;
             uniforms.uVideo.value = 1;
+            videoTexture.needsUpdate = true; // a paused film (behind the front one) still shows its frame
           }
         });
         post.uniforms.uAb.value = Math.min(0.012, Math.abs(pos.getVelocity()) * 0.004);
@@ -396,6 +413,8 @@ export default function Work() {
         if (visible) {
           resumeVideos();
           raf = requestAnimationFrame(frame);
+        } else {
+          panels.forEach(({ video }) => video?.pause()); // scrolled away: nothing plays off screen
         }
       });
       io.observe(host);
